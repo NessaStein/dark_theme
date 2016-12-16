@@ -1,0 +1,465 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh">
+    <head>
+<script type="text/javascript" src="http://www.phpfans.net/common/script/global.js"></script>
+<script type="text/javascript" src="http://www.phpfans.net/common/script/common.js"></script>
+<title>Squid权威指南</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-language" content="zh" />
+        <meta name="author" content="Jeff Pang" />
+        <meta name="keywords" content="Jeff, Pang, Jeff Pang, jeffpang, arcor, Perl, mod_perl, 编程, 脚本编程, 开发, 管理, 系统管理员, Web程序员, Python, C, Squid, Practical mod_perl Guide, pangj, Unix, Linux, RFC821, 中文, Shell, 书籍, Apache, 广州, 计算机, 服务器, CGI, IT, 南中国, 编码" />
+        <meta name="robots" content="index,follow" />
+        <meta name="revisit-after" content="1 days" />
+        <link rel="stylesheet" href="styles/books.css" type="text/css" media="screen, projection" />
+        <link rel="shortcut icon" href="images/ico.ico" />
+        
+    </head>
+    <body id="top"><div id="backtomain"><p><a id="backlogo" href="http://www.phpfans.net/home.arcor.de/jeffpang/default.htm">Jeff Pang的站点</a><a href="http://www.phpfans.net/home.arcor.de/jeffpang/default.htm">Jeff Pang的站点</a></p></div>
+
+        <div class="wrapper">
+        <div class="navigation"><a href="chap07.html">&laquo; 7．磁盘缓存基础</a>&nbsp;&nbsp;<a href="index.html">Index</a>&nbsp;&nbsp;<a
+                    href="chap09.html">第9章 Cache拦截 &raquo;</a>&nbsp;&nbsp;<span><a href="chap01.html">1</a>&nbsp;
+<a href="chap02.html">2</a>&nbsp;
+<a href="chap03.html">3</a>&nbsp;
+<a href="chap04.html">4</a>&nbsp;
+<a href="chap05.html">5</a>&nbsp;
+<a href="chap06.html">6</a>&nbsp;
+<a href="chap07.html">7</a>&nbsp;
+<em><a href="chap08.html">8</a></em>&nbsp;
+<a href="chap09.html">9</a>&nbsp;
+<a href="chap10.html">10</a>&nbsp;
+<a href="chap11.html">11</a>&nbsp;
+<a href="chap12.html">12</a>&nbsp;
+<a href="chap13.html">13</a>&nbsp;
+<a href="chap14.html">14</a>&nbsp;
+<a href="chap15.html">15</a>&nbsp;
+<a href="chap16.html">16</a>&nbsp;
+<a href="index.html">Index</a></span></div>
+            <div class="head">
+
+                <h1>Squid中文权威指南 </h1>
+                <h3>（第8章）</h3>
+                <p>译者序： </p>
+                <p>本人在工作中维护着数台Squid服务器，多次参阅Duane Wessels（他也是Squid的创始人）的这本书，原书名是"Squid: The
+                    Definitive
+                    Guide"，由O'Reilly出版。我在业余时间把它翻译成中文，希望对中文Squid用户有所帮助。对普通的单位上网用户，Squid可充当代理服务器；而对Sina,NetEase这样的大型站点，Squid又充当WEB加速器。这两个角色它都扮演得异常优秀。窗外繁星点点，开源的世界亦如这星空般美丽，而Squid是其中耀眼的一颗星。</p>
+                <p>对本译版有任何问题，请跟我联系，我的Email是：yonghua_peng@yahoo.com.cn</p>
+                <p>彭勇华</p>
+                <h5>目 录</h5>
+                <ul>
+                    <li>
+                        <a href="chap08.html#a0">第8章 高级磁盘缓存主题</a>
+                        <ul>
+                            <li>
+                                <a href="chap08.html#a1">8.1 是否存在磁盘I/O瓶颈？</a>
+                            </li>
+                            <li>
+                                <a href="chap08.html#a2">8.2 文件系统调整选项</a>
+                            </li>
+                            <li>
+                                <a href="chap08.html#a3">8.3 可选择的文件系统</a>
+                            </li>
+                            <li>
+                                <a href="chap08.html#a4">8.4 aufs存储机制</a>
+                                <ul>
+                                    <li>
+                                        <a href="chap08.html#a41">8.4.1 aufs如何工作</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap08.html#a42">8.4.2 aufs发行</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap08.html#a43">8.4.3 监视aufs操作</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="chap08.html#a5">8.5 diskd存储机制</a>
+                                <ul>
+                                    <li>
+                                        <a href="chap08.html#a51">8.5.1 diskd如何工作</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap08.html#a52">8.5.2 编译和配置diskd</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap08.html#a53">8.5.3 监视diskd</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="chap08.html#a6">8.6 coss存储机制</a>
+                                <ul>
+                                    <li>
+                                        <a href="chap08.html#a61">8.6.1 coss如何工作</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap08.html#a62">8.6.2 编译和配置coss</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap08.html#a63">8.6.3 coss发行</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="chap08.html#a7">8.7 null存储机制</a>
+                            </li>
+                            <li>
+                                <a href="chap08.html#a8">8.8 哪种最适合我？</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+			<div id="content">
+            <h2 id="a0">第8章 高级磁盘缓存主题</h2><br/><br/>
+            <h3 id="a1">8.1 是否存在磁盘I/O瓶颈？</h3>
+			    <p>Web缓存器例如squid，通常在磁盘I/O变成瓶颈时，不会正确的体现和告知你。代替的是，随着负载的增加，响应时间和/或命中率会更低效。当然，响应时间和命中率可能因为其他原因而改变，例如网络延时和客户请求方式的改变。</p><p>也许探测cache性能瓶颈的最好方式是做压力测试，例如Web
+			        Polygraph。压力测试的前提是你能完全控制环境，消除未知因素。你可以用不同的cache配置来重复相同的测试。不幸的是，压力测试通常需要大量的时间，并要求有空闲的系统（也许它们正在使用中）。</p><p>假如你有资源执行squid压力测试，请以标准的cache工作负载开始。当你增加负载时，在某些点上你能看到明显的响应延时和/或命中率下降。一旦你观察到这样的性能降低，就禁止掉磁盘缓存，再测试一次。你可以配置squid从来不缓存任何响应（使用null存储机制，见8.7章）。代替的，你能配置工作负载到100%不可cache响应。假如不使用cache时，平均响应时间明显更好，那么可以确认磁盘I/O是该水平吞吐量的瓶颈。</p><p>假如你没有时间或没有资源来执行squid压力测试，那么可检查squid的运行时统计来查找磁盘I/O瓶颈。cache管理器的General
+                Runtime Information 页面（见14章）会显示出cache命中和cache丢失的中值响应时间。</p>
+            <pre>Median Service Times (seconds)  5 min    60 min:
+
+        HTTP Requests (All):   0.39928  0.35832
+
+        Cache Misses:          0.42149  0.39928
+
+        Cache Hits:            0.12783  0.11465
+
+        Near Hits:             0.37825  0.39928
+
+        Not-Modified Replies:  0.07825  0.07409</pre>
+			    <p>对健壮的squid缓存来说，命中显然快于丢失。中值命中响应时间典型的少于0.5秒或更少。我强烈建议你使用SNMP或其他的网络监视工具来从squid缓存采集定期测量值。如果平均命中响应时间增加得太明显，意味着系统有磁盘I/0瓶颈。</p><p>假如你认为产品cache面临此类问题，可以用前面提到的同样的技术来验证你的推测。配置squid不cache任何响应，这样就避开了所有磁盘I/O。然后仔细观察cache丢失响应时间。假如它降下去，那么你的推测该是正确的。</p><p>一旦你确认了磁盘吞吐能力是squid的性能瓶颈，那么可做许多事来改进它。其中一些方法要求重编译squid，然而另一些相对较简单，只需调整Unix文件系统。</p><br/><br/>
+            <h3 id="a2">8.2 文件系统调整选项</h3>
+			    <p>首先，从来不在squid的缓存目录中使用RAID。以我的经验看，RAID总是降低squid使用的文件系统的性能。最好有许多独立的文件系统，每个文件系统使用单独的磁盘驱动器。</p><p>我发现4个简单的方法来改进squid的UFS性能。其中某些特指某种类型的操作系统例如BSD和Linux，也许对你的平台不太合适：</p>
+            <ul>
+                <li>1.某些UFS支持一个noatime的mount选项。使用noatime选项来mount的文件系统，不会在读取时，更新相应的i节点访问时间。使用该选项的最容易的方法是在/etc/fstab里增加如下行：
+                    <pre># Device            Mountpoint    FStype  Options        Dump    Pass#
+   
+/dev/ad1s1c         /cache0       ufs     rw,noatime     0       0</pre><br/><br/></li>
+
+                <li>2.检查mount(8)的manpage里的async选项。设置了该选项，特定的I/O操作（例如更新目录）会异步执行。某些系统的文档会标明这是个危险的标签。某天你的系统崩溃，你也许会丢失整个文件系统。对许多squid安装来说，执行性能的提高值得冒此风险。假如你不介意丢失整个cache内容，那么可以使用该选项。假如cache数据非常有价值，async选项也许不适合你。<br/><br/></li>
+
+                <li>3.BSD有一个功能叫做软更新。软更新是BSD用于Journaling文件系统的代替品。在FreeBSD上，你可以在没有mount的文件系统中，使用tunefs命令来激活该选项：
+                    <pre># umount /cache0
+
+# tunefs -n enable /cache0
+
+# mount /cache0</pre><br/><br/></li>
+
+                <li>4.你对每个文件系统运行一次tunefs命令就可以了。在系统重启时，软更新自动在文件系统中激活了。 在OpenBSD和NetBSD中，可使用softdep
+                    mount选项：
+                    <pre># Device            Mountpoint    FStype  Options        Dump    Pass#
+
+/dev/sd0f           /usr          ffs     rw,softdep     1       2</pre></li>
+            </ul>
+			    <p>假如你象我一样，你可能想知道在async选项和软更新选项之间有何不同。一个重要的区别是，软更新代码被设计成在系统崩溃事件中，保持文件系统的一致性，而async选项不是这样的。这也许让你推断async执行性能好于软更新。然而，如我在附录D中指出的，事实相反。</p><p>以前我提到过，UFS性能特别是写性能，依赖于空闲磁盘的数量。对空文件系统的磁盘写操作，要比满文件系统快得多。这是UFS的最小自由空间参数，和空间/时间优化权衡参数背后的理由之一。假如cache磁盘满了，squid执行性能看起来很糟，那么试着减少cache_dir的容量值，以便更多的自由空间可用。当然，减少cache大小也会降低命中率，但响应时间的改进也许值得这么做。假如你给squid缓存配置新的设备，请考虑使用超过你需要的更大磁盘，并且仅仅使用空间的一半。</p><br/><br/>
+            <h3 id="a3">8.3 可选择的文件系统</h3>
+			    <p>某些操作系统支持不同于UFS（或ext2fs）的文件系统。Journaling文件系统是较普遍的选择。在UFS和Journaling文件系统之间的主要不同在于它们处理更新的方式。在UFS下，更新是实时的。例如，当你改变了某个文件并且将它存储到磁盘，新数据就替换了旧数据。当你删除文件时，UFS直接更新了目录。</p><p>Journaling文件系统与之相反，它将更新写往独立的记帐系统，或日志文件。典型的你能选择是否记录文件改变或元数据改变，或两者兼备。某个后台进程在空闲时刻读取记帐，并且执行实际的改变操作。Journaling文件系统典型的在系统崩溃后比UFS恢复更快。在系统崩溃后，Journaling文件系统简单的读取记帐，并且提交所有显著的改变。</p><p>Journaling文件系统的主要弊端在于它们需要额外的磁盘写操作。改变首先写往日志文件，然后才写往实际的文件或目录。这对web缓存影响尤其明显，因为首先web缓存倾向于更多的磁盘写操作。</p><p>Journaling文件系统对许多操作系统可用。在Linux上，你能选择ext3fs,reiserfs,
+                XFS,和其他的。XFS也可用在SGI/IRIX，它原始是在这里开发的。Solaris用户能使用Veritas文件系统产品。TRU64（以前的Digital
+			        Unix）高级文件系统（advfs）支持Journaling。</p><p>你可以不改变squid的任何配置而使用Journaling文件系统。简单的创建和挂载在操作系统文档里描述的文件系统，而不必改变squid.cf配置文件里的cache_dir行。</p><p>用类似如下命令在Linux中制作reiserfs文件系统：</p>
+            <pre># /sbin/mkreiserfs /dev/sda2</pre>
+            <p>对XFS，使用：</p>
+            <pre># mkfs -t xfs -f /dev/sda2</pre>
+            <p>注意ext3fs其实简单的就是激活了记帐的ext2fs。当创建该文件系统时，对mke2fs使用-j选项：</p>
+            <pre># /sbin/mke2fs -j /dev/sda2</pre>
+            <p>请参考其他操作系统的相关文档。</p><br/><br/>
+            <h3 id="a4">8.4 aufs存储机制</h3>
+			    <p>aufs存储机制已经发展到超出了改进squid磁盘I/O响应时间的最初尝试。"a"代表着异步I/O。默认的ufs和aufs之间的唯一区别，在于I/O是否被squid主进程执行。数据格式都是一样的，所以你能在两者之间轻松选择，而不用丢失任何cache数据。</p><p>aufs使用大量线程进行磁盘I/O操作。每次squid需要读写，打开关闭，或删除cache文件时，I/O请求被分派到这些线程之一。当线程完成了I/O后，它给squid主进程发送信号，并且返回一个状态码。实际上在squid2.5中，某些文件操作默认不是异步执行的。最明显的，磁盘写总是同步执行。你可以修改src/fs/aufs/store_asyncufs.h文件，将ASYNC_WRITE设为1，并且重编译squid。</p><p>aufs代码需要pthreads库。这是POSIX定义的标准线程接口。尽管许多Unix系统支持pthreads库，但我经常遇到兼容性问题。aufs存储系统看起来仅仅在Linux和Solaris上运行良好。在其他操作系统上，尽管代码能编译，但也许会面临严重的问题。</p><p>为了使用aufs，可以在./configure时增加一个选项：</p>
+            <pre>% ./configure --enable-storeio=aufs,ufs</pre>
+			    <p>严格讲，你不必在storeio模块列表中指定ufs。然而，假如你以后不喜欢aufs，那么就需要指定ufs，以便能重新使用稳定的ufs存储机制。</p><p>假如愿意，你也能使用—with-aio-threads=N选项。假如你忽略它，squid基于aufs
+                cache_dir的数量，自动计算可使用的线程数量。表8-1显示了1-6个cache目录的默认线程数量。</p><br/>
+            <p>Table 8-1. Default number of threads for up to six cache directories</p>
+            <div>
+                <table>
+                    <tr>
+                        <td>cache_dirs</td>
+                        <td>Threads</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>16</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>26</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>32</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>36</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>40</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>44</td>
+                    </tr>
+                </table>
+
+            </div><br/>
+            <p>将aufs支持编译进squid后，你能在squid.conf文件里的cache_dir行后指定它：</p>
+            <pre>cache_dir aufs /cache0 4096 16 256</pre>
+            <p>在激活了aufs并启动squid后，请确认每件事仍能工作正常。可以运行tail -f store.log一会儿，以确认缓存目标被交换到磁盘。也可以运行tail -f
+                cache.log并且观察任何新的错误或警告。</p><br/>
+            <h4 id="a41">8.4.1 aufs如何工作</h4>
+			    <p>Squid通过调用pthread_create()来创建大量的线程。所有线程在任何磁盘活动之上创建。这样，即使squid空闲，你也能见到所有的线程。</p><p>无论何时，squid想执行某些磁盘I/O操作（例如打开文件读），它分配一对数据结构，并将I/O请求放进队列中。线程循环读取队列，取得I/O请求并执行它们。因为请求队列共享给所有线程，squid使用独享锁来保证仅仅一个线程能在给定时间内更新队列。</p><p>I/O操作阻塞线程直到它们被完成。然后，将操作状态放进一个完成队列里。作为完整的操作，squid主进程周期性的检查完成队列。请求磁盘I/O的模块被通知操作已完成，并获取结果。</p><p>你可能已猜想到，aufs在多CPU系统上优势更明显。唯一的锁操作发生在请求和结果队列。然而，所有其他的函数执行都是独立的。当主进程在一个CPU上执行时，其他的CPU处理实际的I/O系统调用。</p><br/>
+            <h4 id="a42">8.4.2 aufs发行</h4>
+            <p>线程的有趣特性是所有线程共享相同的资源，包括内存和文件描述符。例如，某个线程打开一个文件，文件描述符为27，所有其他线程能以相同的文件描述符来访问该文件。可能你已知道，在初次管理squid时，文件描述符短缺是较普遍问题。Unix内核典型的有两种文件描述符限制：</p><br/>
+			    <p>进程级的限制和系统级的限制。你也许认为每个进程拥有256个文件描述符足够了（因为使用线程），然而并非如此。在这样的情况下，所有线程共享少量的文件描述符。请确认增加系统的进程文件描述符限制到4096或更高，特别在使用aufs时。</p><p>调整线程数量有点棘手。在某些情况下，可在cache.log里见到如下警告：</p>
+            <pre>2003/09/29 13:42:47| squidaio_queue_request: WARNING - Disk I/O overloading</pre>
+			    <p>这意味着squid有大量的I/O操作请求充满队列，等待着可用的线程。你首先会想到增加线程数量，然而我建议，你该减少线程数量。</p><p>增加线程数量也会增加队列的大小。超过一定数量，它不会改进aufs的负载能力。它仅仅意味着更多的操作变成队列。太长的队列导致响应时间变长，这绝不是你想要的。</p><p>减少线程数量和队列大小，意味着squid检测负载条件更快。当某个cache_dir超载，它会从选择算法里移除掉（见7.4章）。然后，squid选择其他的cache_dir或简单的不存储响应到磁盘。这可能是较好的解决方法。尽管命中率下降，响应时间却保持相对较低。</p><br/>
+            <h4 id="a43">8.4.3 监视aufs操作</h4>
+            <p>Cache管理器菜单里的Async IO Counters选项，可以显示涉及到aufs的统计信息。它显示打开，关闭，读写，stat，和删除接受到的请求的数量。例如：</p>
+            <pre>% squidclient mgr:squidaio_counts
+
+...
+
+ASYNC IO Counters:
+
+Operation       # Requests
+
+open             15318822
+
+close            15318813
+
+cancel           15318813
+
+write                   0
+
+read             19237139
+
+stat                    0
+
+unlink            2484325
+
+check_callback  311678364
+
+queue                   0</pre>
+			    <p>取消(cancel)计数器正常情况下等同于关闭(close)计数器。这是因为close函数总是调用cancel函数，以确认任何未决的I/O操作被忽略。</p><p>写(write)计数器为0，因为该版本的squid执行同步写操作，即使是aufs。</p><p>check_callbak计数器显示squid主进程对完成队列检查了多少次。</p><p>queue值显示当前请求队列的长度。正常情况下，队列长度少于线程数量的5倍。假如你持续观察到队列长度大于这个值，说明squid配得有问题。增加更多的线程也许有帮助，但仅仅在特定范围内。</p><br/><br/>
+            <h3 id="a5">8.5 diskd存储机制</h3>
+			    <p>diskd（disk守护进程的短称）类似于aufs，磁盘I/O被外部进程来执行。不同于aufs的是，diskd不使用线程。代替的，它通过消息队列和共享内存来实现内部进程间通信。</p><p>消息队列是现代Unix操作系统的标准功能。许多年以前在AT&amp;T的Unix
+                System
+                V的版本1上实现了它们。进程间的队列消息以较少的字节传递：32-40字节。每个diskd进程使用一个队列来接受来自squid的请求，并使用另一个队列来传回请求。</p><br/>
+            <h4 id="a51">8.5.1 diskd如何工作</h4>
+			    <p>Squid对每个cache_dir创建一个diskd进程。这不同于aufs，aufs对所有的cache_dir使用一个大的线程池。对每个I/O操作，squid发送消息到相应的diskd进程。当该操作完成后，diskd进程返回一个状态消息给squid。squid和diskd进程维护队列里的消息的顺序。这样，不必担心I/O会无序执行。</p><p>对读和写操作，squid和diskd进程使用共享内存区域。两个进程能对同一内存区域进行读和写。例如，当squid产生读请求时，它告诉diskd进程在内存中何处放置数据。diskd将内存位置传递给read()系统调用，并且通过发送队列消息，通知squid该过程完成了。然后squid从共享内存区域访问最近的可读数据。</p><p>diskd与aufs本质上都支持squid的无阻塞磁盘I/O。当diskd进程在I/O操作上阻塞时，squid有空去处理其他任务。在diskd进程能跟上负载情况下，这点确实工作良好。因为squid主进程现在能够去做更多工作，当然它有可能会加大diskd的负载。diskd有两个功能来帮助解决这个问题。</p><p>首先，squid等待diskd进程捕获是否队列超出了某种极限。默认值是64个排队消息。假如diskd进程获取的数值远大于此，squid会休眠片刻，并等待diskd完成一些未决操作。这本质上让squid进入阻塞I/O模式。它也让更多的CPU时间对diskd进程可用。通过指定cache_dir行的Q2参数的值，你可以配置这个极限值：</p>
+            <pre>cache_dir diskd /cache0 7000 16 256 Q2=50</pre>
+            <p>第二，假如排队操作的数量抵达了另一个极限，squid会停止要求diskd进程打开文件。这里的默认值是72个消息。假如squid想打开一个磁盘文件读或写，但选中的cache_dir有太多的未完成操作，那么打开请求会失败。当打开文件读时，会导致cache丢失。当打开文件写时，会阻碍squid存储cache响应。这两种情况下用户仍能接受到有效响应。唯一实际的影响是squid的命中率下降。这个极限用Q1参数来配置：</p>
+            <pre>cache_dir diskd /cache0 7000 16 256 Q1=60 Q2=50</pre>
+            <p>注意在某些版本的squid中，Q1和Q2参数混杂在默认的配置文件里。最佳选择是，Q1应该大于Q2。</p><br/>
+            <h4 id="a52">8.5.2 编译和配置diskd</h4>
+            <p>为了使用diskd，你必须在运行./configure时，在--enable-storeio列表后增加一项：</p>
+            <pre>% ./configure --enable-storeio=ufs,diskd</pre>
+            <p>diskd看起来是可移植的，既然共享内存和消息队列在现代Unix系统上被广泛支持。然而，你可能需要调整与这两者相关的内核限制。内核典型的有如下可用参数：</p>
+            <pre>MSGMNB</pre>
+            <p>每个消息队列的最大字节限制。对diskd的实际限制是每个队列大约100个排队消息。squid传送的消息是32－40字节，依赖于你的CPU体系。这样，MSGMNB应该是4000或更多。为安全起见，我推荐设置到8192。</p>
+            <pre>MSGMNI</pre>
+            <p>整个系统的最大数量的消息队列。squid对每个cache_dir使用两个队列。假如你有10个磁盘，那就有20个队列。你也许该增加更多，因为其他应用程序也要使用消息队列。我推荐的值是40。</p>
+            <pre>MSGGSZ</pre>
+            <p>消息片断的大小（字节）。大于该值的消息被分割成多个片断。我通常将这个值设为64，以使diskd消息不被分割成多个片断。</p>
+            <pre>MSGSEG</pre>
+            <p>在单个队列里能存在的最大数量的消息片断。squid正常情况下，限制队列的长度为100个排队消息。记住，在64位系统中，假如你没有增加MSGSSZ的值到64，那么每个消息就会被分割成不止1个片断。为了安全起见，我推荐设置该值到512。</p>
+            <pre>MSGTQL</pre>
+            <p>整个系统的最大数量的消息。至少是cache_dir数量的100倍。在10个cache目录情况下，我推荐设置到2048。</p>
+            <pre>MSGMAX</pre>
+            <p>单个消息的最大size。对Squid来说，64字节足够了。然而，你系统中的其他应用程序可能要用到更大的消息。在某些操作系统例如BSD中，你不必设置这个。BSD自动设置它为MSGSSZ
+                * MSGSEG。其他操作系统中，你也许需要改变这个参数的默认值，你可以设置它与MSGMNB相同。</p>
+            <pre>SHMSEG</pre>
+            <p>每个进程的最大数量的共享内存片断。squid对每个cache_dir使用1个共享内存标签。我推荐设置到16或更高。</p>
+            <pre>SHMMNI</pre>
+            <p>共享内存片断数量的系统级的限制。大多数情况下，值为40足够了。</p>
+            <pre>SHMMAX</pre>
+            <p>单个共享内存片断的最大size。默认的，squid对每个片断使用大约409600字节。 为安全起见，我推荐设置到2MB，或2097152。</p>
+            <pre>SHMALL</pre>
+            <p>可分配的共享内存数量的系统级限制。在某些系统上，SHMALL可能表示成页数量，而不是字节数量。在10个cache_dir的系统上，设置该值到16MB（4096页）足够了，并有足够的保留给其他应用程序。</p>
+            <p>在BSD上配置消息队列，增加下列选项到内核配置文件里：</p>
+            <pre># System V message queues and tunable parameters
+
+options         SYSVMSG         # include support for message queues
+
+options         MSGMNB=8192     # max characters per message queue
+
+options         MSGMNI=40       # max number of message queue identifiers
+
+options         MSGSEG=512      # max number of message segments per queue
+
+options         MSGSSZ=64       # size of a message segment MUST be power of 2
+
+options         MSGTQL=2048     # max number of messages in the system
+
+options         SYSVSHM
+
+options         SHMSEG=16       # max shared mem segments per process
+
+options         SHMMNI=32       # max shared mem segments in the system
+
+options         SHMMAX=2097152  # max size of a shared mem segment
+
+options         SHMALL=4096     # max size of all shared memory (pages)</pre>
+            <p>在Linux上配置消息队列，增加下列行到/etc/sysctl.conf：</p>
+            <pre>kernel.msgmnb=8192
+
+kernel.msgmni=40
+
+kernel.msgmax=8192
+
+kernel.shmall=2097152
+
+kernel.shmmni=32
+
+kernel.shmmax=16777216</pre>
+            <p>另外，假如你需要更多的控制，可以手工编辑内核资源文件中的include/linux/msg.h和include/linux/shm.h。</p>
+            <p>在Solaris上，增加下列行到/etc/system，然后重启：</p>
+            <pre>set msgsys:msginfo_msgmax=8192
+
+set msgsys:msginfo_msgmnb=8192
+
+set msgsys:msginfo_msgmni=40
+
+set msgsys:msginfo_msgssz=64
+
+set msgsys:msginfo_msgtql=2048
+
+set shmsys:shminfo_shmmax=2097152
+
+set shmsys:shminfo_shmmni=32
+
+set shmsys:shminfo_shmseg=16</pre>
+            <p>在Digital
+                Unix(TRU64)上，可以增加相应行到BSD风格的内核配置文件中，见前面所叙。另外，你可使用sysconfig命令。首先，创建如下的ipc.stanza文件：</p>
+            <p>ipc:</p>
+            <pre>msg-max = 2048
+
+msg-mni = 40
+
+msg-tql = 2048
+
+msg-mnb = 8192
+
+shm-seg = 16
+
+shm-mni = 32
+
+shm-max = 2097152
+
+shm-max = 4096</pre>
+            <p>然后，运行这个命令并重启：</p>
+            <pre># sysconfigdb -a -f ipc.stanza</pre>
+            <p>一旦你在操作系统中配置了消息队列和共享内存，就可以在squid.conf里增加如下的cache_dir行：</p>
+            <pre>cache_dir diskd /cache0 7000 16 256 Q1=72 Q2=64
+
+cache_dir diskd /cache1 7000 16 256 Q1=72 Q2=64
+
+...</pre><br/>
+            <h4 id="a53">8.5.3 监视diskd</h4>
+            <p>监视diskd运行的最好方法是使用cache管理器。请求diskd页面，例如：</p>
+            <pre>% squidclient mgr:diskd
+
+...
+
+sent_count: 755627
+
+recv_count: 755627
+
+max_away: 14
+
+max_shmuse: 14
+
+open_fail_queue_len: 0
+
+block_queue_len: 0
+
+
+             OPS SUCCESS    FAIL
+
+   open   51534   51530       4
+
+ create   67232   67232       0
+
+  close  118762  118762       0
+
+ unlink   56527   56526       1
+
+   read   98157   98153       0
+
+  write  363415  363415       0</pre>
+            <p>请见14.2.1.6章关于该输出的详细描述。</p><br/><br/>
+            <h3 id="a6">8.6 coss存储机制</h3>
+            <p>循环目标存储机制（Cyclic Object Storage
+                Scheme,coss）尝试为squid定制一个新的文件系统。在ufs基础的机制下，主要的性能瓶颈来自频繁的open()和unlink()系统调用。因为每个cache响应都存储在独立的磁盘文件里，squid总是在打开，关闭，和删除文件。</p><p>与之相反的是，coss使用1个大文件来存储所有响应。在这种情形下，它是特定供squid使用的，小的定制文件系统。coss实现许多底层文件系统的正常功能，例如给新数据分配空间，记忆何处有自由空间等。不幸的是，coss仍没开发完善。coss的开发在过去数年里进展缓慢。虽然如此，基于有人喜欢冒险的事实，我还是在这里描述它。</p><br/>
+            <h4 id="a61">8.6.1 coss如何工作</h4>
+            <p>在磁盘上，每个coss
+                cache_dir是一个大文件。文件大小一直增加，直到抵达它的大小上限。这样，squid从文件的开头处开始，覆盖掉任何存储在这里的数据。然后，新的目标总是存储在该文件的末尾处。</p><p>squid实际上并不立刻写新的目标数据到磁盘上。代替的，数据被拷贝进1MB的内存缓冲区，叫做stripe。在stripe变满后，它被写往磁盘。coss使用异步写操作，以便squid主进程不会在磁盘I/O上阻塞。</p><p>象其他文件系统一样，coss也使用块大小概念。在7.1.4章里，我谈到了文件号码。每个cache目标有一个文件号码，以便squid用于定位磁盘中的数据。对coss来说，文件号码与块号码一样。例如，某个cache目标，其交换文件号码等于112，那它在coss文件系统中就从第112块开始。因此coss不分配文件号码。某些文件号码不可用，因为cache目标通常在coss文件里占用了不止一个块。</p><p>coss块大小在cache_dir选项中配置。因为squid的文件号码仅仅24位，块大小决定了coss缓存目录的最大size：size
+                = 块大小 x (2的24次方)。例如，对512字节的块大小，你能在coss
+                    cache_dir中存储8GB数据。</p><p>coss不执行任何squid正常的cache置换算法（见7.5章）。代替的，cache命中被"移动"到循环文件的末尾。这本质上是LRU算法。不幸的是，它确实意味着cache命中导致磁盘写操作，虽然是间接的。</p><p>在coss中，没必要去删除cache目标。squid简单的忘记无用目标所分配的空间。当循环文件的终点再次抵达该空间时，它就被重新利用。</p><br/>
+            <h4 id="a62">8.6.2 编译和配置coss</h4>
+            <p>为了使用coss，你必须在运行./configure时，在--enable-storeio列表里增加它：</p>
+            <pre>% ./configure --enable-storeio=ufs,coss ...</pre>
+            <p>coss缓存目录要求max-size选项。它的值必须少于stripe大小（默认1MB，但可以用--enable-coss-membuf-size选项来配置）。也请注意你必须忽略L1和L2的值，它们被ufs基础的文件系统使用。如下是示例：</p>
+            <pre>cache_dir coss /cache0/coss 7000 max-size=1000000
+
+cache_dir coss /cache1/coss 7000 max-size=1000000
+
+cache_dir coss /cache2/coss 7000 max-size=1000000
+
+cache_dir coss /cache3/coss 7000 max-size=1000000
+
+cache_dir coss /cache4/coss 7000 max-size=1000000</pre>
+            <p>甚至，你可以使用block-size选项来改变默认的coss块大小。</p>
+            <pre>cache_dir coss /cache0/coss 30000 max-size=1000000 block-size=2048</pre>
+            <p>关于coss的棘手的事情是，cache_dir目录参数（例如/cache0/coss）实际上不是目录，它是squid打开或创建的常规文件。所以你可以用裸设备作为coss文件。假如你错误的创建coss文件作为目录，你可以在squid启动时见到如下错误：</p>
+            <pre>2003/09/29 18:51:42|  /usr/local/squid/var/cache: (21) Is a directory
+
+FATAL: storeCossDirInit: Failed to open a coss file.</pre>
+            <p>因为cache_dir参数不是目录，你必须使用cache_swap_log指令（见13.6章）。否则squid试图在cache_dir目录中创建swap.state文件。在该情形下，你可以见到这样的错误：</p>
+            <pre>2003/09/29 18:53:38| /usr/local/squid/var/cache/coss/swap.state:
+        
+        (2) No such file or directory
+
+FATAL: storeCossDirOpenSwapLog: Failed to open swap log.</pre>
+            <p>coss使用异步I/O以实现更好的性能。实际上，它使用aio_read()和aio_write()系统调用。这点也许并非在所有操作系统中可用。当前它们可用在FreeBSD,Solaris,和Linux中。假如coss代码看起来编译正常，但你得到"Function
+                not implemented"错误消息，那就必须在内核里激活这些系统调用。在FreeBSD上，必须在内核配置文件中有如下选项：</p>
+            <pre>options         VFS_AIO</pre><br/>
+            <h4 id="a63">8.6.3 coss发行</h4>
+            <p>coss还是实验性的功能。没有充分证实源代码在日常使用中的稳定性。假如你想试验一下，请做好存储在coss
+                cache_dir中的资料丢失的准备。</p><p>从另一面说，coss的初步性能测试表现非常优秀。示例请见附录D。</p><p>coss没有很好的支持从磁盘重建cache数据。当你重启squid时，你也许会发现从swap.state文件读取数据失败，这样就丢失了所有的缓存数据。甚至，squid在重启后，不能记忆它在循环文件里的位置。它总是从头开始。</p><p>coss对目标置换采用非标准的方式。相对其他存储机制来说，这可能导致命中率更低。某些操作系统在单个文件大于2GB时，会有问题。假如这样的事发生，你可以创建更多小的coss区域。例如：</p>
+            <pre>cache_dir coss /cache0/coss0 1900 max-size=1000000 block-size=128
+
+cache_dir coss /cache0/coss1 1900 max-size=1000000 block-size=128
+
+cache_dir coss /cache0/coss2 1900 max-size=1000000 block-size=128
+
+cache_dir coss /cache0/coss3 1900 max-size=1000000 block-size=128</pre>
+            <p>使用裸磁盘设备（例如/dev/da0s1c）也不会工作得很好。理由之一是磁盘设备通常要求I/O发生在512个字节的块边界（译者注：也就是块设备访问）。另外直接的磁盘访问绕过了系统高速缓存，可能会降低性能。然而，今天的许多磁盘驱动器，已经内建了高速缓存。</p><br/><br/>
+            <h3 id="a7">8.7 null存储机制</h3>
+			    <p>Squid有第5种存储机制叫做null。就像名字暗示的一样，这是最不健壮的机制。写往null cache_dir的文件实际上不被写往磁盘。</p><p>
+                大多数人没有任何理由要使用null存储系统。当你想完全禁止squid的磁盘缓存时，null才有用。你不能简单的从squid.conf文件里删除所有cache_dir行，因为这样的话squid会增加默认的ufs
+			        cache_dir。null存储系统有些时候在测试squid，和压力测试时有用。既然文件系统是典型的性能瓶颈，使用null存储机制能获取基于当前硬件的squid的性能上限。</p><p>为了使用该机制，在运行./configure时，你必须首先在--enable-storeio列表里指定它：</p>
+            <pre>% ./configure --enable-storeio=ufs,null ...</pre>
+            <p>然后在squid.conf里创建cache_dir类型为null:</p>
+            <pre>cache_dir /tmp null</pre>
+            <p>也许看起来有点奇怪，你必须指定目录给null存储机制。squid使用目录名字作为cache_dir标识符。例如，你能在cache管理器的输出里见到它。</p><br/><br/>
+            <h3 id="a8">8.8 哪种最适合我？</h3>
+			    <p>Squid的存储机制选择看起来有点混乱和迷惑。aufs比diskd更好？我的系统支持aufs或coss吗？假如我使用新的机制，会丢失数据吗？可否混合使用存储机制？</p><p>首先，假如Squid轻度使用（就是说每秒的请求数少于5个），默认的ufs存储机制足够了。在这样的低请求率中，使用其他存储机制，你不会观察到明显的性能改进。</p><p>假如你想决定何种机制值得一试，那你的操作系统可能是个决定因素。例如，aufs在Linux和Solaris上运行良好，但看起来在其他系统中有问题。另外，coss代码所用到的函数，当前不可用在某些操作系统中（例如NetBSD）。</p><p>从我的观点看来，高性能的存储机制在系统崩溃事件中，更易受数据丢失的影响。这就是追求最好性能的权衡点。然而对大多数人来说，cache数据相对价值较低。假如squid的缓存因为系统崩溃而破坏掉，你会发现这很容易，只需简单的newfs磁盘分区，让cache重新填满即可。如果你觉得替换Squid的缓存内容较困难或代价很大，你就应该使用低速的，但可信的文件系统和存储机制。</p><p>近期的Squid允许你对每个cache_dir使用不同的文件系统和存储机制。然而实际上，这种做法是少见的。假如所有的cache_dir使用相同的size和相同的存储机制，可能冲突更少。</p>
+            <br/><br/>
+            <div class="navigation"><a href="chap07.html">&laquo; 7．磁盘缓存基础</a>&nbsp;&nbsp;<a href="chap09.html"
+                >第9章 Cache拦截 &raquo;</a></div><div id="footer">
+                                        <div id="bottom">
+                                                <ul id="additional">
+                                                    <li id="copyright" title="Jeff Pang站点的内容和图片归Jeff Pang所有">&#169; 2005 - 2007 by Jeff Pang。 版权所有。</li>
+                                                    <li id="xhtml"><a title="Jeff Pang的站点严格基于有效的XHTML 1.0" href="http://www.phpfans.net/validator.w3.org/check@uri=referer">xhtml</a></li>
+                                                    <li id="css"><a title="Jeff Pang的站点基于有效的CSS" href="http://www.phpfans.net/jigsaw.w3.org/css-validator">css</a></li>
+                                                    <li id="goup"><a title="回到Jeff Pang的站点的顶部" href="chap08.html#top">回到顶部</a></li>
+                                                </ul>
+                                        </div>
+                                </div>
+        </div><div id="siteinfo" title="The content by Jeff Pang, the design by Sebastian Haase"><span id="info">content by Jeff Pang &middot; design by Sebastian Haase</span></div></div>
+
+   
+</body>
+</html>

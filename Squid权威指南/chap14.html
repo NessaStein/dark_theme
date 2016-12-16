@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh">
+    <head>
+<script type="text/javascript" src="http://www.phpfans.net/common/script/global.js"></script>
+<script type="text/javascript" src="http://www.phpfans.net/common/script/common.js"></script>
+<title>Squid权威指南</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-language" content="zh" />
+        <meta name="author" content="Jeff Pang" />
+        <meta name="keywords" content="Jeff, Pang, Jeff Pang, jeffpang, arcor, Perl, mod_perl, 编程, 脚本编程, 开发, 管理, 系统管理员, Web程序员, Python, C, Squid, Practical mod_perl Guide, pangj, Unix, Linux, RFC821, 中文, Shell, 书籍, Apache, 广州, 计算机, 服务器, CGI, IT, 南中国, 编码" />
+        <meta name="robots" content="index,follow" />
+        <meta name="revisit-after" content="1 days" />
+        <link rel="stylesheet" href="styles/books.css" type="text/css" media="screen, projection" />
+        <link rel="shortcut icon" href="images/ico.ico" />
+        
+    </head>
+    <body id="top"><div id="backtomain"><p><a id="backlogo" href="http://www.phpfans.net/home.arcor.de/jeffpang/default.htm">Jeff Pang的站点</a><a href="http://www.phpfans.net/home.arcor.de/jeffpang/default.htm">Jeff Pang的站点</a></p></div>
+
+        <div class="wrapper">
+        <div class="navigation"><a href="chap13.html">&laquo; 第13章 日志文件</a>&nbsp;&nbsp;<a href="index.html">Index</a>&nbsp;&nbsp;<a
+                    href="chap15.html">第15章 服务加速模式 &raquo;</a>&nbsp;&nbsp;<span><a href="chap01.html">1</a>&nbsp;
+<a href="chap02.html">2</a>&nbsp;
+<a href="chap03.html">3</a>&nbsp;
+<a href="chap04.html">4</a>&nbsp;
+<a href="chap05.html">5</a>&nbsp;
+<a href="chap06.html">6</a>&nbsp;
+<a href="chap07.html">7</a>&nbsp;
+<a href="chap08.html">8</a>&nbsp;
+<a href="chap09.html">9</a>&nbsp;
+<a href="chap10.html">10</a>&nbsp;
+<a href="chap11.html">11</a>&nbsp;
+<a href="chap12.html">12</a>&nbsp;
+<a href="chap13.html">13</a>&nbsp;
+<em><a href="chap14.html">14</a></em>&nbsp;
+<a href="chap15.html">15</a>&nbsp;
+<a href="chap16.html">16</a>&nbsp;
+<a href="index.html">Index</a></span></div>
+            <div class="head">
+
+                <h1>Squid中文权威指南 </h1>
+                <h3>（第14章）</h3>
+                <p>译者序： </p>
+                <p>本人在工作中维护着数台Squid服务器，多次参阅Duane Wessels（他也是Squid的创始人）的这本书，原书名是"Squid: The
+                    Definitive
+                    Guide"，由O'Reilly出版。我在业余时间把它翻译成中文，希望对中文Squid用户有所帮助。对普通的单位上网用户，Squid可充当代理服务器；而对Sina,NetEase这样的大型站点，Squid又充当WEB加速器。这两个角色它都扮演得异常优秀。窗外繁星点点，开源的世界亦如这星空般美丽，而Squid是其中耀眼的一颗星。</p>
+                <p>对本译版有任何问题，请跟我联系，我的Email是：yonghua_peng@yahoo.com.cn</p>
+                <p>彭勇华</p>
+                <h5>目 录</h5>
+                <ul>
+                    <li>
+                        <a href="chap14.html#a0">第14章 监视Squid</a>
+                        <ul>
+                            <li>
+                                <a href="chap14.html#a1">14.1 cache.log告警</a>
+                            </li>
+                            <li>
+                                <a href="chap14.html#a2">14.2 Cache管理器</a>
+                            </li>
+                            <li>
+                                <a href="chap14.html#a3">14.3 使用SNMP</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+			<div id="content">
+            <h2 id="a0">第14章 监视Squid</h2><br/><br/>
+            <h3 id="a1">14.1 cache.log告警</h3>
+			    <p>在碰到Squid有问题时，应该首先查看cache.log里的警告信息。在正常运行时，你可发现不同的警告或信息，它们会或不会表明问题存在。我在13.1节里讲到了cache.log的结构。这里我重提一些可能在日志文件里见到的警告信息。</p><p>在中值响应时间超过限制时，high_response_time_warning指令让Squid打印一条警告。该值是毫秒级的，默认禁止。假如增加如下行到squid.conf：</p>
+            <pre>high_response_time_warning 1500</pre>
+            <p>如果大于1分钟的时间范围内的中值响应时间超过1.5秒，Squid会发布如下警告：</p>
+            <pre>2003/09/29 03:17:31| WARNING: Median response time is 2309 milliseconds</pre>
+			    <p>在设置该指令前，你应该对Squid的正常响应时间级别有较好理解。假如设置过低，会导致很多假报警。在上述示例里，意味着一半用户的请求需要花费2.3秒去完成。高响应时间可能由本地程序产生，例如运行超出文件描述符；也可能是远程问题，例如拥挤的Internet连接。</p><p>high_page_fault_warning作用类似。假如每分钟的页面错误次数超过给定限制，它会导致Squid发布一条警告。高页面错误率通常意味着Squid进程不能完全放在内存，必须被交换到磁盘。这种交换严重影响了Squid的性能，所以你必须尽快解决问题，见16.1.8节的描述。</p><p>Squid使用Unix的getrusage()函数来获取页面错误计数。在某些操作系统上（例如Solaris），页面错误计数器表现异常。这样，high_page_fault_warning在这些系统上会导致假报警。</p><p>high_memory_warning指令也类似于前面提到的报警。在此情况下，它检查Squid进程的size，假如size超过了限制，就会在cache.log里告警。在某些操作系统上，进程size只增不降。这样，除非Squid关闭，你会经常得到这个警告。</p><p>进程size来自于如下3个函数之一：mallinfo(
+                ), mstats( ), 或sbrk( )
+			        。假如这些函数在你的操作系统上不可用，则high_memory_warning不能工作。</p><p>Squid有其他一些硬编码的告警，可在cache.log里见到：</p>
+            <pre>DNS lookup for 'neighbor.host.name' failed!</pre>
+            <p>在Squid查询邻居cache的IP地址失败时，这点会发生。Squid大约每小时刷新一次邻居的地址。只要邻居的地址不可知，Squid不会发送会话到那边。</p>
+            <pre>Detected DEAD Sibling: neighbor.host.name/3128/3130</pre>
+            <p>在Squid不能与某个邻居cache通信时，它记录这个消息。例如，太多连续的ICP查询没有得到响应，这点就会发生。见10.3.2节的更多信息。</p>
+            <pre>95% of replies from 'neighbor.host.name' are UDP_DENIED</pre>
+            <p>该消息表明邻居cache拒绝回答Squid的查询。可能意味着Squid发送未经许可的查询到邻居cache。假如邻居cache使用地址基础的访问控制，并且你近来更改了地址，那它们就不会知道这个更改。在检测到该条件后，Squid拒绝发送更多查询到邻居cache。</p>
+            <pre>Probable misconfigured neighbor at 192.168.121.5</pre>
+            <p>若有未经授权的cache客户端向你发送ICP或HTCP查询，这点就会发生。最好的处理方法就是找到负责这个cache的组织或个人，询问他们为什么要查询你的cache。</p>
+            <pre>Forwarding loop detected for:</pre>
+            <p>回想一下，当单个请求遍历Squid
+                2次时，就发生了转发循环。请求的Via头部包含了遍历过的所有代理的列表。假如Squid在Via列表里检测到了自己的名字，它发布转发循环警告，并将请求直接发送到原始服务器。见10.2节关于转发循环的解释。</p>
+            <pre>Closing client 192.168.121.5 connection due to lifetime timeout</pre>
+			    <p>client_lifetime指令对单个HTTP请求的存活期设置一个上限。当这样的请求终止时，Squid发布警告，它可能意味着某人正发起长时间连接来滥用cache，例如，无穷的download目标。</p><p>如你所见，caceh.log仅提供了异常事件的通知。对周期性的监控，还需要其他工具。cache管理器可能是最好的选择，尽管它的接口还不完美。</p><br/><br/>
+            <h3 id="a2">14.2 Cache管理器</h3>
+            <p>译者注：由于本节的内容本人从未涉及，为避免误导，请读者自行阅读原书的该章节。 也有可能以后会更新本节内容，请关注本书中文版release的web目录：</p>
+            <a href="http://www.phpfans.net/home.arcor.de/jeffpang/squid">http://home.arcor.de/jeffpang/squid </a><br/><br/><br/>
+            <h3 id="a3">14.3 使用SNMP</h3>
+            <p>译者注：由于本节的内容本人从未涉及，为避免误导，请读者自行阅读原书的该章节。 也有可能以后会更新本节内容，请关注本书中文版release的web目录：</p>
+            <a href="http://www.phpfans.net/home.arcor.de/jeffpang/squid">http://home.arcor.de/jeffpang/squid</a>
+            <br/><br/><br/>
+            <div class="navigation"><a href="chap13.html">&laquo; 第13章 日志文件</a>&nbsp;&nbsp;<a href="chap15.html"
+                >第15章 服务加速模式 &raquo;</a></div><div id="footer">
+                                        <div id="bottom">
+                                                <ul id="additional">
+                                                    <li id="copyright" title="Jeff Pang站点的内容和图片归Jeff Pang所有">&#169; 2005 - 2007 by Jeff Pang。 版权所有。</li>
+                                                    <li id="xhtml"><a title="Jeff Pang的站点严格基于有效的XHTML 1.0" href="http://www.phpfans.net/validator.w3.org/check@uri=referer">xhtml</a></li>
+                                                    <li id="css"><a title="Jeff Pang的站点基于有效的CSS" href="http://www.phpfans.net/jigsaw.w3.org/css-validator">css</a></li>
+                                                    <li id="goup"><a title="回到Jeff Pang的站点的顶部" href="chap14.html#top">回到顶部</a></li>
+                                                </ul>
+                                        </div>
+                                </div>
+				</div><div id="siteinfo" title="The content by Jeff Pang, the design by Sebastian Haase"><span id="info">content by Jeff Pang &middot; design by Sebastian Haase</span></div>
+        </div>
+
+   
+</body>
+</html>

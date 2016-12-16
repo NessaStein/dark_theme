@@ -1,0 +1,1043 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh">
+    <head>
+<script type="text/javascript" src="http://www.phpfans.net/common/script/global.js"></script>
+<script type="text/javascript" src="http://www.phpfans.net/common/script/common.js"></script>
+<title>Squid权威指南</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-language" content="zh" />
+        <meta name="author" content="Jeff Pang" />
+        <meta name="keywords" content="Jeff, Pang, Jeff Pang, jeffpang, arcor, Perl, mod_perl, 编程, 脚本编程, 开发, 管理, 系统管理员, Web程序员, Python, C, Squid, Practical mod_perl Guide, pangj, Unix, Linux, RFC821, 中文, Shell, 书籍, Apache, 广州, 计算机, 服务器, CGI, IT, 南中国, 编码" />
+        <meta name="robots" content="index,follow" />
+        <meta name="revisit-after" content="1 days" />
+        <link rel="stylesheet" href="styles/books.css" type="text/css" media="screen, projection" />
+        <link rel="shortcut icon" href="images/ico.ico" />
+        
+    </head>
+    <body id="top"><div id="backtomain"><p><a id="backlogo" href="http://www.phpfans.net/home.arcor.de/jeffpang/default.htm">Jeff Pang的站点</a><a href="http://www.phpfans.net/home.arcor.de/jeffpang/default.htm">Jeff Pang的站点</a></p></div>
+
+        <div class="wrapper">
+        <div class="navigation"><a href="chap15.html">&laquo; 第15章 服务加速模式</a>&nbsp;&nbsp;<a href="index.html">Index</a>&nbsp;&nbsp;<span><a href="chap01.html">1</a>&nbsp;
+<a href="chap02.html">2</a>&nbsp;
+<a href="chap03.html">3</a>&nbsp;
+<a href="chap04.html">4</a>&nbsp;
+<a href="chap05.html">5</a>&nbsp;
+<a href="chap06.html">6</a>&nbsp;
+<a href="chap07.html">7</a>&nbsp;
+<a href="chap08.html">8</a>&nbsp;
+<a href="chap09.html">9</a>&nbsp;
+<a href="chap10.html">10</a>&nbsp;
+<a href="chap11.html">11</a>&nbsp;
+<a href="chap12.html">12</a>&nbsp;
+<a href="chap13.html">13</a>&nbsp;
+<a href="chap14.html">14</a>&nbsp;
+<a href="chap15.html">15</a>&nbsp;
+<em><a href="chap16.html">16</a></em>&nbsp;
+<a href="index.html">Index</a></span></div>
+            <div class="head">
+
+                <h1>Squid中文权威指南 </h1>
+                <h3>（第16章）</h3>
+                <p>译者序： </p>
+                <p>本人在工作中维护着数台Squid服务器，多次参阅Duane Wessels（他也是Squid的创始人）的这本书，原书名是"Squid: The
+                    Definitive
+                    Guide"，由O'Reilly出版。我在业余时间把它翻译成中文，希望对中文Squid用户有所帮助。对普通的单位上网用户，Squid可充当代理服务器；而对Sina,NetEase这样的大型站点，Squid又充当WEB加速器。这两个角色它都扮演得异常优秀。窗外繁星点点，开源的世界亦如这星空般美丽，而Squid是其中耀眼的一颗星。</p>
+                <p>对本译版有任何问题，请跟我联系，我的Email是：yonghua_peng@yahoo.com.cn</p>
+                <p>彭勇华</p>
+                <h5>目 录</h5>
+                <ul>
+                    <li>
+                        <a href="chap16.html#a0">第16章 调试和故障处理</a>
+                        <ul>
+                            <li>
+                                <a href="chap16.html#a1">16.1 一些通用问题</a>
+                                <ul>
+                                    <li>
+                                        <a href="chap16.html#a11">16.1.1 "Failed to make swap directory"</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap16.html#a12">16.1.2 "Address already in use"</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap16.html#a13">16.1.3 "Could not determine fully qualified
+                                            hostname"</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap16.html#a14">16.1.4 "DNS name lookup tests failed"</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap16.html#a15">16.1.5 "Illegal character in hostname"</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap16.html#a16">16.1.6 "Running out of filedescriptors"</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap16.html#a17">16.1.7 "icmpRecv: Connection refused"</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap16.html#a18">16.1.8 在运行一段时间后，Squid变慢了</a>
+                                    </li>
+                                    <li>
+                                        <a href="chap16.html#a19">16.1.9 调试访问控制</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="chap16.html#a2">16.2 通过cache.log进行调试</a>
+                            </li>
+                            <li>
+                                <a href="chap16.html#a3">16.3 Coredump，断点，和堆栈跟踪</a>
+                            </li>
+                            <li>
+                                <a href="chap16.html#a31">16.3.1 不能找到core文件？</a>
+                            </li>
+                            <li>
+                                <a href="chap16.html#a4">16.4 重现问题</a>
+                            </li>
+                            <li>
+                                <a href="chap16.html#a5">16.5 报告Bug</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="chap16.html#a6">译后序</a>
+                    </li>
+                </ul>
+
+
+            </div>
+			<div id="content">
+            <h2 id="a0">第16章 调试和故障处理</h2><br/><br/>
+            <h3 id="a1">16.1 一些通用问题</h3>
+            <p>在讨论通用debug前，我先提起一些经常发生的问题。</p><br/>
+            <h4 id="a11">16.1.1 "Failed to make swap directory"</h4>
+            <pre>Failed to make swap directory /var/spool/cache: (13) Permission denied</pre>
+            <p>这点发生在你运行squid
+                -z，并且squid的用户ID没有对/var/spool目录的写权限的时候。记住假如以root来启动squid，并且没有增加cache_effective_user行，那么squid默认以nobody用户运行。解决方法很简单：</p>
+            <pre># chown nobody:nobody /var/spool</pre><br/>
+            <h4 id="a12">16.1.2 "Address already in use"</h4>
+            <pre>commBind: Cannot bind socket FD 10 to *:3128: Address already in use</pre>
+			    <p>这个消息出现在bind()系统调用失败时，因为请求端口已经被其他应用程序所打开。通常，若已有一个squid在运行，而又试图启动第2个squid实例，就会发生这种情况。假如你见到这个错误消息，请使用ps来观察是否squid已经在运行。</p><p>Squid使用SO_REUSEADDR
+			        socket选项，以便bind()调用总能成功，即使仍有一些残余的socket位于TIME_WAIT状态。若该消息出现，尽管squid没有在运行，但你的操作系统可能在处理这个问题上有bug。重启操作系统是解决问题的一个方法。</p><p>另一个可能性是端口（例如3128）当前已被其他应用程序使用。假如你怀疑这点，就可使用lsof程序来发现哪个应用正在该端口上侦听。FreeBSD用户能使用sockstat代替。</p><br/>
+            <h4 id="a13">16.1.3 "Could not determine fully qualified hostname"</h4>
+            <pre>FATAL: Could not determine fully qualified hostname.  Please set 'visible_hostname'</pre>
+            <p>假如squid不能识别它自己的完整可验证域名，就会报这个错。如下是squid使用的算法：</p>
+            <ul>
+                <li>1) 假如你将squid的HTTP端口绑定在指定的接口地址上，squid试图对该地址执行反向DNS查询。假如成功，查询答案就被用上。<br/><br/></li>
+
+                <li>2) Squid调用gethostname( )函数，然后使用 gethostbyname(
+                    )函数，试着解析其IP地址。假如成功，squid使用后者函数返回的官方主机名串。</li>
+            </ul>
+            <p>假如以上2项技术都不能工作，squid以前面提到的致命错误消息退出。在该情形下，必须使用visible_hostname指令来告诉squid它的主机名。例如：</p>
+            <pre>visible_hostname my.host.name</pre><br/>
+            <h4 id="a14">16.1.4 "DNS name lookup tests failed"</h4>
+            <p>默认情况下，squid在启动前执行一些DNS查询。这点确保你的DNS服务器可到达，并且运行正确。假如测试失败，可在cache.log或syslog里见到如下消息：</p>
+            <pre>FATAL: ipcache_init: DNS name lookup tests failed</pre>
+			    <p>假如你在内网里使用squid，squid可能不能查询到它的标准主机名列表。可使用dns_testnames指令来指定你自己的主机名。只要接受到响应，squid就会认为DNS测试成功。</p><p>假如你想完全跳过DNS测试，简单的在启动squid时，使用-D命令行选项：</p>
+            <pre>% squid -D ...</pre><br/>
+            <h4 id="a15">16.1.5 "Illegal character in hostname"</h4>
+            <pre>urlParse: Illegal character in hostname 'super_bikes.tripod.com'</pre>
+            <p>默认情况下，squid检查URL的主机名部分的字符，假如它发现了非标准的字符，squid会抱怨。参考RFC
+                1034和1035，名字必须由字母A-Z,数字0-9，以及短横线(-)组成。下划线(_)是最有问题的字符之一。</p><p>Squid验证主机名是因为，在某些情形下，DNS对畸形字符的解析会很困难。例如：</p>
+            <pre>% host super_bikes.tripod.com
+
+super_bikes.tripod.com has address 209.202.196.70
+ 
+ 
+% ping super_bikes.tripod.com
+
+ping: cannot resolve super_bikes.tripod.com: Unknown server error</pre>
+            <p>Squid事先检查主机名，这好过于以后返回Unknown server
+                error消息。然后它会告诉用户主机名包含畸形字符。</p><p>某些DNS解析器确实能处理下划线和其他非标准字符。假如你想让squid不检查主机名，请在运行./configure时，使用—disable-hostname-checks选项。假如你允许下划线作为唯一的例外，那么使用—enable-underscores选项。</p><br/>
+            <h4 id="a16">16.1.6 "Running out of filedescriptors"</h4>
+            <pre>WARNING! Your cache is running out of filedescriptors</pre>
+			    <p>上述消息出现在squid用完了所有可用文件描述符时。假如这点发生在正常条件下，就有必要增加内核的文件描述符限制，并且重新编译squid。请见3.3.1章。</p><p>假如squid成为了拒绝服务攻击的目标，那也会见到这条消息。某些人可能有意或无意的，同时对squid发送成百上千条请求。在这种情形下，可以增加一条包过滤规则，阻止来自恶意地址的TCP进入连接。假如攻击是分布式的，或使用假冒源地址，就很难阻止它们。</p><p>转发循环（见10.2章）也可能耗尽squid的所有文件描述符，但仅仅发生在squid不能检测到死循环时。Via头部包含了某个请求遍历过的所有代理的主机名。squid在头部里查找它自己的主机名，假如发现了，就报告这个循环。假如因为某些理由，Via头部从外出或进入HTTP请求里过滤掉了，squid就不能检测到循环。在该情形下，所有文件描述符被循环遍历squid的同一请求迅速耗完。</p><br/>
+            <h4 id="a17">16.1.7 "icmpRecv: Connection refused"</h4>
+            <p>假如pinger程序没有正确的安装，可见到下列消息：</p>
+            <pre>icmpRecv: recv: (61) Connection refused</pre>
+            <p>不过看起来更象是因为没有打开ICMP
+                socket的权限，pinger立刻退出了。因为该进程未在运行，当squid试图与它会话时，会接受到I/O错误。为了解决该问题，请到源代码目录以root运行：</p>
+            <pre># make install-pinger</pre>
+            <p>假如成功，你可见到pinger程序有下列文件属主和许可设置：</p>
+            <pre># ls -l /usr/local/squid/libexec/pinger
+    
+-rws--x--x  1 root  squid  140728 Sep 16 19:58 /usr/local/squid/libexec/pinger</pre><br/>
+            <h4 id="a18">16.1.8 在运行一段时间后，Squid变慢了</h4>
+			    <p>看起来更象squid与其他进程，或与它自己，在竞争系统中的内存。当squid进程的内存不再充足时，操作系统被迫从交换空间进行内存读写。这对squid的性能有强烈影响。</p><p>为了证实这个想法，请使用top和ps等工具检查squid的进程大小。也检查squid自己的页面错误计数器，见14.2.1.24章的描述。一旦你已确认内存耗费是问题所在，请执行下列步骤来减少squid的内存使用：</p>
+            <ul>
+                <li>1. 减少cache_mem值，见附录B。<br/><br/></li>
+
+                <li>2. 关掉内存池，用该选项： <pre>memory_pools off</pre></li>
+
+                <li>3. 通过降低一个或多个cache目录的size，减少磁盘cache大小。</li>
+            </ul><br/>
+            <h4 id="a19">16.1.9 调试访问控制</h4>
+            <p>假如访问控制不能正确工作，如下是一些有用帮助。编辑squid.conf文件，设置debug_options行如下：</p>
+            <pre>debug_options ALL,1 33,2</pre>
+            <p>然后，重配置squid:</p>
+            <pre>% squid -k reconfigure</pre>
+            <p>现在，对每个客户端请求以及每个响应，squid都写一条消息到cache.log。该消息包含了请求方式，URI，是否请求/响应被允许或拒绝，以及与之匹配的最后ACL的名字。例如：</p>
+            <pre>2003/09/29 20:22:05| The request
+
+    GET http://images.slashdot.org:80/topics/topicprivacy.gif is ALLOWED,
+
+    because it matched 'localhost'
+
+
+2003/09/29 20:22:05| The reply for
+
+    GET http://images.slashdot.org/topics/topicprivacy.gif is ALLOWED,
+
+    because it matched 'all'</pre>
+            <p>知道ACL的名字，并非总能知道相应的http_access行，但也相当接近了。假如必要，可以复制acl行，并给予它们唯一的名字，以便给定的ACL名字仅仅出现在一个http_access规则里。</p><br/><br/>
+            <h3 id="a2">16.2 通过cache.log进行调试</h3>
+            <p>从13.1章已了解到，cache.log包含了不同的操作消息，squid认为这些消息足够重要，从而告诉了你。我们也将这些作为debug消息考虑。可以使用debug_options指令来控制出现在cache.log里的消息的冗长度。通过增加debug等级，可以见到更详细的消息，有助于理解squid正在做什么。例如：</p>
+            <pre>debug_options ALL,1 11,3 20,3</pre>
+			    <p>在squid源代码里的每个debug消息有2个数字特征：1个节和1个等级。节范围从0到100，等级范围从0到10。通常来说，节号对应着源代码的组成成分。换句话说，在单一源文件里的所有消息，有相同的节号。在某些情形下，多个文件使用同一debug节，这意味着某个源文件变得太大，从而被拆分成多个小块。</p><p>每个源文件的顶部有一行，用于指示debug节。它看起来如此：</p>
+            <pre>* DEBUG: section 9     File Transfer Protocol (FTP)</pre>
+            <p>我不指望你通过查看源文件来查找节号，所有相关信息定义在表16-1里。</p>
+            <br/><br/>
+            <p>Table 16-1. Debugging section numbers for the debug_options directive</p>
+            <table>
+                <tr>
+                    <td>Number</td>
+                    <td>Description</td>
+                    <td>Source file(s)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>Client Database</td>
+                    <td>client_db.c</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Startup and Main Loop</td>
+                    <td>main.c</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Unlink Daemon</td>
+                    <td>unlinkd.c</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Configuration File Parsing</td>
+                    <td>cache_cf.c</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Error Generation</td>
+                    <td>errorpage.c</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Socket Functions</td>
+                    <td>comm.c</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Socket Functions</td>
+                    <td>comm_select.c</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Disk I/O Routines</td>
+                    <td>disk.c</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Multicast</td>
+                    <td>multicast.c</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Swap File Bitmap</td>
+                    <td>filemap.c</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>File Transfer Protocol (FTP)</td>
+                    <td>ftp.c</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Gopher</td>
+                    <td>gopher.c</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>Hypertext Transfer Protocol (HTTP)</td>
+                    <td>http.c</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>Internet Cache Protocol</td>
+                    <td>icp_v2.c</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>Internet Cache Protocol</td>
+                    <td>icp_v3.c</td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>High Level Memory Pool Management</td>
+                    <td>mem.c</td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>IP Cache</td>
+                    <td>ipcache.c</td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>Neighbor Routines</td>
+                    <td>neighbors.c</td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td>Cache Manager Objects</td>
+                    <td>cache_manager.c</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>Request Forwarding</td>
+                    <td>forward.c</td>
+                </tr>
+                <tr>
+                    <td>18</td>
+                    <td>Cache Manager Statistics</td>
+                    <td>stat.c</td>
+                </tr>
+                <tr>
+                    <td>19</td>
+                    <td>Store Memory Primitives</td>
+                    <td>stmem.c</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Storage Manager</td>
+                    <td>store.c</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Storage Manager Client-Side Interface</td>
+                    <td>store_client.c</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Storage Manager Heap-Based Replacement</td>
+                    <td>repl/heap/store_heap_replacement.c</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Storage Manager Logging Functions</td>
+                    <td>store_log.c</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Storage Manager MD5 Cache Keys</td>
+                    <td>store_key_md5.c</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Storage Manager Swapfile Metadata</td>
+                    <td>store_swapmeta.c</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Storage Manager Swapin Functions</td>
+                    <td>store_swapin.c</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Storage Manager Swapout Functions</td>
+                    <td>store_swapout.c</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Store Rebuild Routines</td>
+                    <td>store_rebuild.c</td>
+                </tr>
+                <tr>
+                    <td>21</td>
+                    <td>Misc Functions</td>
+                    <td>tools.c</td>
+                </tr>
+                <tr>
+                    <td>22</td>
+                    <td>Refresh Calculation</td>
+                    <td>refresh.c</td>
+                </tr>
+                <tr>
+                    <td>23</td>
+                    <td>URL Parsing</td>
+                    <td>url.c</td>
+                </tr>
+                <tr>
+                    <td>24</td>
+                    <td>WAIS Relay</td>
+                    <td>wais.c</td>
+                </tr>
+                <tr>
+                    <td>25</td>
+                    <td>MIME Parsing</td>
+                    <td>mime.c</td>
+                </tr>
+                <tr>
+                    <td>26</td>
+                    <td>Secure Sockets Layer Proxy</td>
+                    <td>ssl.c</td>
+                </tr>
+                <tr>
+                    <td>27</td>
+                    <td>Cache Announcer</td>
+                    <td>send-announce.c</td>
+                </tr>
+                <tr>
+                    <td>28</td>
+                    <td>Access Control</td>
+                    <td>acl.c</td>
+                </tr>
+                <tr>
+                    <td>29</td>
+                    <td>Authenticator</td>
+                    <td>auth/basic/auth_basic.c</td>
+                </tr>
+                <tr>
+                    <td>29</td>
+                    <td>Authenticator</td>
+                    <td>auth/digest/auth_digest.c</td>
+                </tr>
+                <tr>
+                    <td>29</td>
+                    <td>Authenticator</td>
+                    <td>authenticate.c</td>
+                </tr>
+                <tr>
+                    <td>29</td>
+                    <td>NTLM Authenticator</td>
+                    <td>auth/ntlm/auth_ntlm.c</td>
+                </tr>
+                <tr>
+                    <td>30</td>
+                    <td>Ident (RFC 1413)</td>
+                    <td>ident.c</td>
+                </tr>
+                <tr>
+                    <td>31</td>
+                    <td>Hypertext Caching Protocol</td>
+                    <td>htcp.c</td>
+                </tr>
+                <tr>
+                    <td>32</td>
+                    <td>Asynchronous Disk I/O</td>
+                    <td>fs/aufs/async_io.c</td>
+                </tr>
+                <tr>
+                    <td>33</td>
+                    <td>Client-Side Routines</td>
+                    <td>client_side.c</td>
+                </tr>
+                <tr>
+                    <td>34</td>
+                    <td>Dnsserver Interface</td>
+                    <td>dns.c</td>
+                </tr>
+                <tr>
+                    <td>35</td>
+                    <td>FQDN Cache</td>
+                    <td>fqdncache.c</td>
+                </tr>
+                <tr>
+                    <td>37</td>
+                    <td>ICMP Routines</td>
+                    <td>icmp.c</td>
+                </tr>
+                <tr>
+                    <td>38</td>
+                    <td>Network Measurement Database</td>
+                    <td>net_db.c</td>
+                </tr>
+                <tr>
+                    <td>39</td>
+                    <td>Cache Array Routing Protocol</td>
+                    <td>carp.c</td>
+                </tr>
+                <tr>
+                    <td>40</td>
+                    <td>Referer Logging</td>
+                    <td>referer.c</td>
+                </tr>
+                <tr>
+                    <td>40</td>
+                    <td>User-Agent Logging</td>
+                    <td>useragent.c</td>
+                </tr>
+                <tr>
+                    <td>41</td>
+                    <td>Event Processing</td>
+                    <td>event.c</td>
+                </tr>
+                <tr>
+                    <td>42</td>
+                    <td>ICMP Pinger Program</td>
+                    <td>pinger.c</td>
+                </tr>
+                <tr>
+                    <td>43</td>
+                    <td>AIOPS</td>
+                    <td>fs/aufs/aiops.c</td>
+                </tr>
+                <tr>
+                    <td>44</td>
+                    <td>Peer Selection Algorithm</td>
+                    <td>peer_select.c</td>
+                </tr>
+                <tr>
+                    <td>45</td>
+                    <td>Callback Data Registry</td>
+                    <td>cbdata.c</td>
+                </tr>
+                <tr>
+                    <td>45</td>
+                    <td>Callback Data Registry</td>
+                    <td>leakfinder.c</td>
+                </tr>
+                <tr>
+                    <td>46</td>
+                    <td>Access Log</td>
+                    <td>access_log.c</td>
+                </tr>
+                <tr>
+                    <td>47</td>
+                    <td>Store COSS Directory Routines</td>
+                    <td>fs/coss/store_dir_coss.c</td>
+                </tr>
+                <tr>
+                    <td>47</td>
+                    <td>Store Directory Routines</td>
+                    <td>fs/aufs/store_dir_aufs.c</td>
+                </tr>
+                <tr>
+                    <td>47</td>
+                    <td>Store Directory Routines</td>
+                    <td>fs/diskd/store_dir_diskd.c</td>
+                </tr>
+                <tr>
+                    <td>47</td>
+                    <td>Store Directory Routines</td>
+                    <td>fs/null/store_null.c</td>
+                </tr>
+                <tr>
+                    <td>47</td>
+                    <td>Store Directory Routines</td>
+                    <td>fs/ufs/store_dir_ufs.c</td>
+                </tr>
+                <tr>
+                    <td>47</td>
+                    <td>Store Directory Routines</td>
+                    <td>store_dir.c</td>
+                </tr>
+                <tr>
+                    <td>48</td>
+                    <td>Persistent Connections</td>
+                    <td>pconn.c</td>
+                </tr>
+                <tr>
+                    <td>49</td>
+                    <td>SNMP Interface</td>
+                    <td>snmp_agent.c</td>
+                </tr>
+                <tr>
+                    <td>49</td>
+                    <td>SNMP Support</td>
+                    <td>snmp_core.c</td>
+                </tr>
+                <tr>
+                    <td>50</td>
+                    <td>Log File Handling</td>
+                    <td>logfile.c</td>
+                </tr>
+                <tr>
+                    <td>51</td>
+                    <td>File Descriptor Functions</td>
+                    <td>fd.c</td>
+                </tr>
+                <tr>
+                    <td>52</td>
+                    <td>URN Parsing</td>
+                    <td>urn.c</td>
+                </tr>
+                <tr>
+                    <td>53</td>
+                    <td>AS Number Handling</td>
+                    <td>asn.c</td>
+                </tr>
+                <tr>
+                    <td>54</td>
+                    <td>Interprocess Communication</td>
+                    <td>ipc.c</td>
+                </tr>
+                <tr>
+                    <td>55</td>
+                    <td>HTTP Header</td>
+                    <td>HttpHeader.c</td>
+                </tr>
+                <tr>
+                    <td>56</td>
+                    <td>HTTP Message Body</td>
+                    <td>HttpBody.c</td>
+                </tr>
+                <tr>
+                    <td>57</td>
+                    <td>HTTP Status-Line</td>
+                    <td>HttpStatusLine.c</td>
+                </tr>
+                <tr>
+                    <td>58</td>
+                    <td>HTTP Reply (Response)</td>
+                    <td>HttpReply.c</td>
+                </tr>
+                <tr>
+                    <td>59</td>
+                    <td>Auto-Growing Memory Buffer with printf</td>
+                    <td>MemBuf.c</td>
+                </tr>
+                <tr>
+                    <td>60</td>
+                    <td>Packer: A Uniform Interface to Store Like Modules</td>
+                    <td>Packer.c</td>
+                </tr>
+                <tr>
+                    <td>61</td>
+                    <td>Redirector</td>
+                    <td>redirect.c</td>
+                </tr>
+                <tr>
+                    <td>62</td>
+                    <td>Generic Histogram</td>
+                    <td>StatHist.c</td>
+                </tr>
+                <tr>
+                    <td>63</td>
+                    <td>Low Level Memory Pool Management</td>
+                    <td>MemPool.c</td>
+                </tr>
+                <tr>
+                    <td>64</td>
+                    <td>HTTP Range Header</td>
+                    <td>HttpHdrRange.c</td>
+                </tr>
+                <tr>
+                    <td>65</td>
+                    <td>HTTP Cache Control Header</td>
+                    <td>HttpHdrCc.c</td>
+                </tr>
+                <tr>
+                    <td>66</td>
+                    <td>HTTP Header Tools</td>
+                    <td>HttpHeaderTools.c</td>
+                </tr>
+                <tr>
+                    <td>67</td>
+                    <td>String</td>
+                    <td>String.c</td>
+                </tr>
+                <tr>
+                    <td>68</td>
+                    <td>HTTP Content-Range Header</td>
+                    <td>HttpHdrContRange.c</td>
+                </tr>
+                <tr>
+                    <td>69</td>
+                    <td>HTTP Header: Extension Field</td>
+                    <td>HttpHdrExtField.c</td>
+                </tr>
+                <tr>
+                    <td>70</td>
+                    <td>Cache Digest</td>
+                    <td>CacheDigest.c</td>
+                </tr>
+                <tr>
+                    <td>71</td>
+                    <td>Store Digest Manager</td>
+                    <td>store_digest.c</td>
+                </tr>
+                <tr>
+                    <td>72</td>
+                    <td>Peer Digest Routines</td>
+                    <td>peer_digest.c</td>
+                </tr>
+                <tr>
+                    <td>73</td>
+                    <td>HTTP Request</td>
+                    <td>HttpRequest.c</td>
+                </tr>
+                <tr>
+                    <td>74</td>
+                    <td>HTTP Message</td>
+                    <td>HttpMsg.c</td>
+                </tr>
+                <tr>
+                    <td>75</td>
+                    <td>WHOIS Protocol</td>
+                    <td>whois.c</td>
+                </tr>
+                <tr>
+                    <td>76</td>
+                    <td>Internal Squid Object handling</td>
+                    <td>internal.c</td>
+                </tr>
+                <tr>
+                    <td>77</td>
+                    <td>Delay Pools</td>
+                    <td>delay_pools.c</td>
+                </tr>
+                <tr>
+                    <td>78</td>
+                    <td>DNS Lookups; interacts with lib/rfc1035.c</td>
+                    <td>dns_internal.c</td>
+                </tr>
+                <tr>
+                    <td>79</td>
+                    <td>Squid-Side DISKD I/O Functions</td>
+                    <td>fs/diskd/store_io_diskd.c</td>
+                </tr>
+                <tr>
+                    <td>79</td>
+                    <td>Storage Manager COSS Interface</td>
+                    <td>fs/coss/store_io_coss.c</td>
+                </tr>
+                <tr>
+                    <td>79</td>
+                    <td>Storage Manager UFS Interface</td>
+                    <td>fs/ufs/store_io_ufs.c</td>
+                </tr>
+                <tr>
+                    <td>80</td>
+                    <td>WCCP Support</td>
+                    <td>wccp.c</td>
+                </tr>
+                <tr>
+                    <td>82</td>
+                    <td>External ACL</td>
+                    <td>external_acl.c</td>
+                </tr>
+                <tr>
+                    <td>83</td>
+                    <td>SSL Accelerator Support</td>
+                    <td>ssl_support.c</td>
+                </tr>
+                <tr>
+                    <td>84</td>
+                    <td>Helper Process Maintenance</td>
+                    <td>helper.c</td>
+                </tr>
+
+            </table>
+            <br/><br/>
+			    <p>debug等级这样分配：重要消息有较低值，非重要消息有较高值。0等级是非常重要的消息，10等级是相对不紧要的消息。另外，关于等级其实并没有严格的向导或要求。开发者通常自由选择适应的debug等级。</p><p>debug_options指令决定哪个消息出现在cache.log，它的语法是：</p>
+            <pre>debug_options section,level section,level ...</pre>
+			    <p>默认设置是ALL,1，这意味着squid会将所有等级是0或1的debug消息打印出来。假如希望cache.log里出现更少的debug消息，可设置debug_options为ALL,0。</p><p>假如想观察某个组件的其他debug信息，简单的将相应的节号和等级增加到debug_options列表的末端。例如，如下行对FTP服务端代码增加了等级5的debug:</p>
+            <pre>debug_options ALL,1 9,5</pre>
+            <p>如同其他配置指令一样，可以改变debug_options，然后给squid发送重置信号：</p>
+            <pre>% squid -k reconfigure</pre>
+            <p>注意debug_options参数是按顺序处理的，后来的值会覆盖先前的值。假如使用ALL关键字，这点尤其要注意。考虑如下示例：</p>
+            <pre>debug_options 9,5 20,9 4,2 ALL,1</pre>
+			    <p>在该情形下，最后的值覆盖了所有先前的设置，因为ALL,1对所有节设置了debug等级为1。</p><p>选择合适的debug节号和等级有时非常困难，尤其是对squid新手而言。许多更详细的debug消息仅对squid开发者和熟悉源代码的用户有意义。无经验的squid用户会发现许多debug消息无意义和不可理解。进一步的说，假如squid相对忙的话，你可能对某个特殊请求或事件进行独立debug有困难。假如你能一次用一个请求来测试squid，那么高的debug等级通常更有用。</p><p>若以高debug等级来运行squid较长时间，需要特别谨慎。假如squid繁忙，cache.log增长非常快，并可能最终耗尽它的分区的剩余空间。假如这点发生，squid以致命消息退出。另一个关注点是性能可能下降明显。因为有大量的debug消息，squid要耗费许多CPU资源来格式化和打印字符串。将所有debug消息写往cache.log，也浪费了大量的磁盘带宽。</p><br/><br/>
+            <h3 id="a3">16.3 Coredump，断点，和堆栈跟踪</h3>
+			    <p>假如不幸，squid可能在运行时遭遇致命错误。这类型的错误来自3个风格：断点，总线错误，和异常分片。</p><p>断点是源代码里的正常检测。它是一个工具，被开发者用来确认在处理某事情前，相应的条件总为真。假如条件为假，程序退出并创建一个core文件，以便开发者能分析形势。如下是个典型的示例：</p>
+            <pre>int some_array[100];
+    
+
+void
+
+some_func(int idx)
+
+{
+        ...
+        
+        assert(idx &lt; 100);
+        
+        
+        some_array[idx]++;
+       
+        ...
+}</pre>
+            <p>这里，断点确保数组索引的值位于数组范围内。假如去访问大于或等于100的数组元素，就会遇到错误。假如不知何故，idx的值不小于100，程序运行时会打印如下消息：</p>
+            <pre>assertion failed: filename.c:123: "idx &lt; 100"</pre>
+            <p>假如这点发生在squid上，就可在cache.log里见到"assertion
+                failed"消息。另外，操作系统会创建一个core文件，这对事后分析有用。在本节结尾，我会解释如何去处理core文件。</p><p>总线错误是：由于处理器检测到其总线上的异常条件，会引发机器语言指令执行时致命失败。当处理器试图操作非连续的内存地址时，通常会发生这种错误。在64位处理器系统上可能更容易见到总线错误，例如Alpha和某些SPARC
+                    CPU。幸运的是，它们容易修复。</p><p>异常分片错误不幸的更常见，且有时难以修复。SEGV通常发生在进程试图访问无效内存区域时（可能是个NULL指针，或超出进程空间之外的内存地址）。当bug原因和SEGV影响在不同时间呈现时，它们特别难于捕获到。</p><p>Squid默认捕获总线错误和异常分片，当它们发生时，squid试图执行一个clean
+                shutdown（清理关闭）。可在cache.log里见到类似的语句：</p>
+            <pre>FATAL: Received Bus Error...dying.
+
+2003/09/29 23:18:01| storeDirWriteCleanLogs: Starting...</pre>
+			    <p>大多数情形下，squid能够写swap.state文件的clean版本。在退出前，squid调用abort()函数来创建core文件。core文件可以帮助你或其他开发者来捕获和修复bug。</p><p>在错误发生时马上创建core文件，而不是先调用clean
+                shutdown过程，这样更利于调试。使用-C命令行选项，可以告诉squid不去捕获总线错误和异常分片：</p>
+            <pre>% squid -C ...</pre>
+            <p>注意某些操作系统使用文件名core，而另外一些优先考虑进程名（例如squid.core）。一旦找到core文件，请使用调试器来进行堆栈跟踪。gdb是GNU调试器--GNU
+                C编译器的配套工具。假如没有gdb，可试着运行dbx或adb代替。如下显示如何使用gdb来进行堆栈跟踪：</p>
+            <pre>% gdb /usr/local/squid/sbin/squid /path/to/squid.core
+    
+   
+...
+    
+Core was generated by 'squid'.
+    
+Program terminated with signal 6, Abort trap.
+...</pre>
+            <p>然后，敲入where来打印堆栈轨迹：</p>
+            <pre>(gdb) where
+    
+#0  0x28168b54 in kill ( ) from /usr/lib/libc.so.4
+    
+#1  0x281aa0ce in abort ( ) from /usr/lib/libc.so.4
+    
+#2  0x80a2316 in death (sig=10) at tools.c:301
+    
+#3  0xbfbfffac in ?? ( )
+    
+#4  0x80abe0a in storeDiskdSend (mtype=4, sd=0x82101e0, id=1214000,
+    
+    sio=0x9e90a10, size=4096, offset=-1, shm_offset=0)
+    
+    at diskd/store_io_diskd.c:485
+    
+#5  0x80ab726 in storeDiskdWrite (SD=0x82101e0, sio=0x9e90a10,
+    
+    buf=0x13e94000 "...", size=4096, offset=-1, free_func=0)
+    
+    at diskd/store_io_diskd.c:251
+    
+#6  0x809d2fb in storeWrite (sio=0x9e90a10, buf=0x13e94000 "...",
+    
+    size=4096, offset=-1, free_func=0) at store_io.c:89
+    
+#7  0x80a1c2d in storeSwapOut (e=0xc5a7800) at store_swapout.c:259
+    
+#8  0x809b667 in storeAppend (e=0xc5a7800, buf=0x810f9a0 "...", len=57344)
+    
+    at store.c:533
+    
+#9  0x807873b in httpReadReply (fd=134, data=0xc343590) at http.c:642
+    
+#10 0x806492f in comm_poll (msec=10) at comm_select.c:445
+    
+#11 0x8084404 in main (argc=2, argv=0xbfbffa8c) at main.c:742
+    
+#12 0x804a465 in _start ( )</pre>
+            <p>你可见到，堆栈轨迹打印了每个函数的名字，它的参数，以及源代码文件名和行数。当捕获bug时，这些信息特别有用。然而在某些情形下，这些还不够。可能要求你在调试器里执行其他命令，例如打印来自某个函数的变量的值：</p>
+            <pre>(gdb) frame 4
+    
+
+#4  0x80abe0a in storeDiskdSend (mtype=4, sd=0x82101e0, id=1214000,
+        
+    sio=0x9e90a10, size=4096, offset=-1, shm_offset=0)
+        
+    at diskd/store_io_diskd.c:485
+    
+485         x = msgsnd(diskdinfo->smsgid, &amp;M,
+     
+ msg_snd_rcv_sz, IPC_NOWAIT);
+    
+(gdb) set print pretty
+    
+(gdb) print M
+    
+$2 = {
+      
+  mtype = 4,
+      
+  id = 1214000,
+      
+  seq_no = 7203103,
+      
+  callback_data = 0x9e90a10,
+      
+  size = 4096,
+      
+  offset = -1,
+      
+  status = -1,
+      
+  shm_offset = 0
+    
+}</pre>
+            <p>在报告了某个bug后，请保留core文件一些天，可能还需要从它获取其他信息。</p><br/>
+            <h4 id="a31">16.3.1 不能找到core文件？</h4>
+			    <p>core文件写在进程的当前目录。squid在启动时默认不改变其当前目录。这样你的core文件（如果有的话），会写在启动squid的目录。假如文件系统没有足够的自由空间，或进程属主没有对该目录的写权限，就无法产生core文件。可以使用coredump_dir指令来让squid使用指定的coredump目录--位于其他地方的有充足自由空间和完全权限的目录。</p><p>进程资源限制也会阻止产生core文件。进程限制参数之一是coredump文件的大小。大部分操作系统默认设置这个值为"无限"。在当前shell里使用limits或ulimit命令，可以检查当前限制。然而请注意，你的shell的限制可能不同于squid的进程限制，特别是当squid随系统启动而自动启动时。假如怀疑进程限制阻止了core文件的产生，试试这样：</p>
+            <pre>csh% limit coredumpsize unlimited
+
+csh% squid -NCd1</pre>
+            <p>在FreeBSD上，某个sysctl参数控制了操作系统对调用了setuid()或setgid()函数的进程，是否产生core文件。假如以root启动，squid会用到这些函数。这样为了得到coredump，必须告诉内核创建core文件，用这个命令：</p>
+            <pre># sysctl kern.sugid_coredump=1</pre>
+            <p>请见sysctl.conf的manpage，关于在系统启动时如何自动设置变量的信息。</p><br/><br/>
+            <h3 id="a4">16.4 重现问题</h3>
+			    <p>有时候可能遇到这样的问题：某个请求，或原始服务器看起来不能与squid协调工作。可以使用下面的技术来确定问题在于squid，客户端，或原始服务器。技巧就是捕获HTTP请求，然后用不同的方法响应它，直到你验证了问题。</p><p>捕获HTTP请求意味着获取除了URL外的更多信息，包括请求方式，HTTP版本号，和所有请求头部。捕获请求的一个方法是，短期激活squid的完整debug模式。在squid主机上，敲入：</p>
+            <pre>% squid -kdebug</pre>
+            <p>然后，到web浏览器上发布请求。squid几乎会立刻接受到请求。在若干秒后，回到squid主机，并发布同样的命令：</p>
+            <pre>% squid -kdebug</pre>
+            <p>现在cache.log文件包含了上述客户端的请求。假如squid繁忙，cache.log会包含大量的请求，所以你必须查找它。它看起来如下：</p>
+            <pre>2003/09/29 10:37:40| parseHttpRequest: Method is 'GET'
+
+2003/09/29 10:37:40| parseHttpRequest: URI is 'http://squidbook.org/'
+
+2003/09/29 10:37:40| parseHttpRequest: Client HTTP version 1.1.
+
+2003/09/29 10:37:40| parseHttpRequest: req_hdr = {
+
+User-Agent: Mozilla/5.0 (compatible; Konqueror/3)
+
+Pragma: no-cache
+
+Cache-control: no-cache
+
+Accept: text/*, image/jpeg, image/png, image/*, */*
+
+Accept-Encoding: x-gzip, gzip, identity
+
+Accept-Charset: iso-8859-1, utf-8;q=0.5, *;q=0.5
+
+Accept-Language: en
+
+Host: squidbook.org</pre>
+            <p>注意squid把首行元素分开打印，必须手工组合它们如下：</p>
+            <pre>GET http://squidbook.org/ HTTP/1.1</pre>
+            <p>捕获完整请求的另一个方法是使用工具例如netcat或socket (http://www.jnickelsen.de/socket/
+                )。启动socket程序侦听在某个端口，然后配置浏览器使用该端口作为代理地址。当再次发起请求时，socket打印出HTTP请求：</p>
+            <pre>% socket -s 8080
+    
+GET http://squidbook.org/ HTTP/1.1
+
+User-Agent: Mozilla/5.0 (compatible; Konqueror/3)
+
+Pragma: no-cache
+
+Cache-control: no-cache
+
+Accept: text/*, image/jpeg, image/png, image/*, */*
+
+Accept-Encoding: x-gzip, gzip, identity
+
+Accept-Charset: iso-8859-1, utf-8;q=0.5, *;q=0.5
+
+Accept-Language: en
+
+Host: squidbook.org</pre>
+            <p>最后，还可以使用网络包分析工具例如tcpdump或ethereal。使用tcpdump捕获到一些包后，可以使用tcpshow来查看它们：</p>
+            <pre># tcpdump -w tcpdump.log -c 10 -s 1500 port 80
+    
+# tcpshow -noHostNames -noPortNames &lt; tcpdump.log | less
+    
+...</pre>
+            <pre>Packet 4
+    
+TIME:   08:39:29.593051 (0.000627)
+    
+LINK:   00:90:27:16:AA:75 -> 00:00:24:C0:0D:25 type=IP
+    
+  IP:   10.0.0.21 -> 206.168.0.6 hlen=20 TOS=00 dgramlen=304 id=4B29
+            
+        MF/DF=0/1 frag=0 TTL=64 proto=TCP cksum=15DC
+    
+ TCP:   port 2074 -> 80 seq=0481728885 ack=4107144217
+        
+        hlen=32 (data=252) UAPRSF=011000 wnd=57920 cksum=EB38 urg=0
+    
+ DATA:  GET / HTTP/1.0.
+           
+        Host: www.ircache.net.
+            
+        Accept: text/html, text/plain, application/pdf, application/
+        
+        postscript, text/sgml, */*;q=0.01.
+        
+        Accept-Encoding: gzip, compress.
+        
+        Accept-Language: en.
+        
+        Negotiate: trans.
+        
+        User-Agent: Lynx/2.8.1rel.2 libwww-FM/2.14.</pre>
+			    . <p>注意tcpshow按数据里的新行字符为周期来进行打印。</p><p>一旦捕获到了某个请求，就将它存到文件。然后可以使用netcat或socket来让它重新通过squid：</p>
+            <pre>% socket squidhost 3128 &lt; request | less</pre>
+            <p>假如响应看起来正常，问题可能在于用户代理。否则，可以改变不同事情来孤立问题。例如，假如你看到一些古怪的HTTP头部，那就从请求里删除它们，然后再试一次。让请求直接到达原始服务器，而不是经过squid，这样做也可调试。方法就是从请求里删除http://host.name/，并将请求发送到原始服务器：</p>
+            <pre>% cat request
+    
+GET / HTTP/1.1
+
+User-Agent: Mozilla/5.0 (compatible; Konqueror/3)
+
+Pragma: no-cache
+
+Cache-control: no-cache
+
+Accept: text/*, image/jpeg, image/png, image/*, */*
+
+Accept-Encoding: x-gzip, gzip, identity
+
+Accept-Charset: iso-8859-1, utf-8;q=0.5, *;q=0.5
+
+Accept-Language: en
+
+Host: squidbook.org
+    
+% socket squidbook.org 80 &lt; request | less</pre>
+            <p>以这种方式使用HTTP时，请参考RFC 2616和Oreilly的HTTP:The Definitive Guide这本书。</p><br/><br/>
+            <h3 id="a5">16.5 报告Bug</h3>
+			    <p>假如你的squid版本已经有几个月未更新了，在报告bug前你应该更新它。因为其他人可能也注意了同样的bug，并且它已被修复。</p><p>假如你发现了squid的合理bug，请将它填入到squid的bug跟踪数据库：<a
+                    href="http://www.phpfans.net/www.squid-cache.org/bugs/default.htm">http://www.squid-cache.org/bugs/</a> 。
+			        它当前是个"bugzilla"数据库，需要你创建一个帐号。当bug被squid开发者处理了时，你会接到更新通知。</p><p>假如你对报告bug很陌生，请先花时间阅读Simon
+                Tatham写的"How to Report Bugs Effectively" (<a
+                    href="http://www.phpfans.net/www.chiark.greenend.org.uk/~sgtatham/bugs.html"
+                    >http://www.chiark.greenend.org.uk/~sgtatham/bugs.html</a> )。</p>
+            <p>当报告bug时，确认包含下列信息：</p>
+            <ul>
+                <li>1) Squid版本号。假如bug发生在不止一个版本上，就也要写上其他版本号。<br/><br/></li>
+
+                <li>2) 操作系统名字和版本。<br/><br/></li>
+
+                <li>3) bug每次都发生，还是偶尔发生。<br/><br/></li>
+
+                <li>4) 所发生事情的精确描述。类似于"它不能工作"，"请求失败"之类的语句，本质上对bug修复者无用。记得要非常详细。<br/><br/></li>
+
+                <li>5) 对断点，总线错误，或异常分片的堆栈跟踪。</li>
+            </ul>
+            <p>记住squid开发者通常是无报酬的义务劳动，所以要有耐心。严重bug比小问题享有更高的解决优先级。</p><br/><br/>
+            <h3 id="a6">译后序</h3>
+            <p>当译完本书最后一章时，心头袭来深深的寂寞。</p><br/>
+            <p>在计算机领域，国内外技术水平差之甚远，部分原因归咎于语言的差异。</p>
+            <p>某种技术在国外流行若干年后，才有相应的中文文档出现。</p>
+            <p>没有文档，技术人员无法起步；而不规范的发行文档，更是误导了一批又一批的初学者。</p><br/>
+            <p>本书的作者Duane Wessels是位大师级的人物，除了精湛的技术外，他写的本书文笔通畅，脉络清晰，丝毫不晦涩。</p>
+            <p>若对研究Squid抱着严肃的态度，那么请认真的拜读原著。</p>
+            <p>而我所能做的，只是按照我自己的理解，把原著译成中文。</p><br/>
+            <p>好的软件只是解决了某一方面的问题，而真正可贵的，是开源的精神。</p>
+            <p>在开源的世界里，可以体会到现实中所没有的无私与奉献。</p><br/>
+            <p>想起陈玉莲演的小龙女，和金轮法王有过这么一段对话：</p><br/>
+            <p>金轮法王：你能接住十招，我就放过你们。</p>
+            <p>小龙女：试试看咯。</p>
+            <p>金轮法王：若接不住呢？</p>
+            <p>小龙女：接不住就接不住咯。</p><br/>
+            <p>多年来让我记住的，是陈玉莲这种不食人间烟火，与世无争的神韵。</p><br/>
+            <p>彭勇华</p>
+            <p>yonghua_peng@yahoo.com.cn</p>
+            <p>2005年10月于广州</p>
+            <br/><br/>
+            <div class="navigation"><a href="chap15.html">&laquo; 第15章 服务加速模式</a></div><div id="footer">
+                                        <div id="bottom">
+                                                <ul id="additional">
+                                                    <li id="copyright" title="Jeff Pang站点的内容和图片归Jeff Pang所有">&#169; 2005 - 2007 by Jeff Pang。 版权所有。</li>
+                                                    <li id="xhtml"><a title="Jeff Pang的站点严格基于有效的XHTML 1.0" href="http://www.phpfans.net/validator.w3.org/check@uri=referer">xhtml</a></li>
+                                                    <li id="css"><a title="Jeff Pang的站点基于有效的CSS" href="http://www.phpfans.net/jigsaw.w3.org/css-validator">css</a></li>
+                                                    <li id="goup"><a title="回到Jeff Pang的站点的顶部" href="chap16.html#top">回到顶部</a></li>
+                                                </ul>
+                                        </div>
+                                </div>
+        </div><div id="siteinfo" title="The content by Jeff Pang, the design by Sebastian Haase"><span id="info">content by Jeff Pang &middot; design by Sebastian Haase</span></div></div>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh">
+    <head>
+<script type="text/javascript" src="http://www.phpfans.net/common/script/global.js"></script>
+<script type="text/javascript" src="http://www.phpfans.net/common/script/common.js"></script>
+<title>Squid权威指南</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-language" content="zh" />
+        <meta name="author" content="Jeff Pang" />
+        <meta name="keywords" content="Jeff, Pang, Jeff Pang, jeffpang, arcor, Perl, mod_perl, 编程, 脚本编程, 开发, 管理, 系统管理员, Web程序员, Python, C, Squid, Practical mod_perl Guide, pangj, Unix, Linux, RFC821, 中文, Shell, 书籍, Apache, 广州, 计算机, 服务器, CGI, IT, 南中国, 编码" />
+        <meta name="robots" content="index,follow" />
+        <meta name="revisit-after" content="1 days" />
+        <link rel="stylesheet" href="styles/books.css" type="text/css" media="screen, projection" />
+        <link rel="shortcut icon" href="images/ico.ico" />
+    
+               
+  </head>
+  <body id="top"><div id="backtomain"><p><a id="backlogo" href="http://www.phpfans.net/home.arcor.de/jeffpang/default.htm">Jeff Pang的站点</a><a href="http://www.phpfans.net/home.arcor.de/jeffpang/default.htm">Jeff Pang的站点</a></p></div>
+    <div class="wrapper">
+    <div class="navigation"><a href="chap01.html">&laquo; 第1章 介绍</a>&nbsp;&nbsp;<a href="index.html">Index</a>&nbsp;&nbsp;<a href="chap03.html">第3章
+          编译和安装 &raquo;</a>&nbsp;&nbsp;<span><a href="chap01.html">1</a>&nbsp;
+<em><a href="chap02.html">2</a></em>&nbsp;
+<a href="chap03.html">3</a>&nbsp;
+<a href="chap04.html">4</a>&nbsp;
+<a href="chap05.html">5</a>&nbsp;
+<a href="chap06.html">6</a>&nbsp;
+<a href="chap07.html">7</a>&nbsp;
+<a href="chap08.html">8</a>&nbsp;
+<a href="chap09.html">9</a>&nbsp;
+<a href="chap10.html">10</a>&nbsp;
+<a href="chap11.html">11</a>&nbsp;
+<a href="chap12.html">12</a>&nbsp;
+<a href="chap13.html">13</a>&nbsp;
+<a href="chap14.html">14</a>&nbsp;
+<a href="chap15.html">15</a>&nbsp;
+<a href="chap16.html">16</a>&nbsp;
+<a href="index.html">Index</a></span></div>
+      <div class="head">
+
+        <h1>Squid中文权威指南</h1>
+        <h3>（第2章）</h3>
+        <p>译者序： </p>
+        <p>本人在工作中维护着数台Squid服务器，多次参阅Duane Wessels（他也是Squid的创始人）的这本书，原书名是"Squid: The Definitive
+          Guide"，由O'Reilly出版。我在业余时间把它翻译成中文，希望对中文Squid用户有所帮助。对普通的单位上网用户，Squid可充当代理服务器；而对Sina,NetEase这样的大型站点，Squid又充当WEB加速器。这两个角色它都扮演得异常优秀。窗外繁星点点，开源的世界亦如这星空般美丽，而Squid是其中耀眼的一颗星。</p>
+        <p>对本译版有任何问题，请跟我联系，我的Email是：yonghua_peng@yahoo.com.cn</p>
+        <p>彭勇华</p>
+        <h5>目 录</h5>
+        <ul>
+          <li>
+            <a href="chap02.html#a0">第2章 获取Squid</a>
+            <ul>
+              <li>
+                <a href="chap02.html#a1">2.1 版本和发布</a>
+              </li>
+              <li>
+                <a href="chap02.html#a2">2.2 使用源代码</a>
+              </li>
+              <li>
+                <a href="chap02.html#a3">2.3 预编译的二进制文件</a>
+              </li>
+              <li>
+                <a href="chap02.html#a4">2.4 匿名CVS</a>
+              </li>
+              <li>
+                <a href="chap02.html#a5">2.5 devel.squid-cache.org</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+	  <div id="content">
+      <h2 id="a0">第2章 获取Squid</h2><br/><br/>
+      <h3 id="a1">2.1 版本和发布</h3>
+	    <p>Squid开发者定期发布源代码。每一个发布版有一个版本号，例如2.5.STABLE4。版本号的第三部分以STABLE或DEVEL（短期开发版本）开头。</p><p>也许你能猜到，DEVEL版本倾向于拥有更新，更试验性的功能。但也许它们有更多的bugs。无经验的用户不应该运行DEVEL版本。假如你选择运行一个DEVEL版本，并且遇到了问题，请将问题报告给Squid维护者。</p><p>在一段时间的开发期后，Squid版本号变为STABLE。该版本适合于普通用户。当然，即使稳定版可能也有一些bugs。高的稳定版本（例如STABLE3,STABLE4）应该bugs更少。假如你特别关心稳定性，你应该使用这些最近发布版本中的一个。</p><br/>
+      <br/>
+      <h3 id="a2">2.2 使用源代码</h3>
+	    <p>为什么你不能copy一份预编译的二进制代码到你的系统中，并且期望它运行良好呢？主要理由是squid的代码需要知道特定操作系统的参数。实际上，最重要的参数是打开文件描述符的最大数量。Squid的./configure脚本在编译之前侦察这些值。假如你获取一个已编译的使用某个参数值的squid到另一个使用不同参数值的系统中，可能会遇到问题。</p><p>另一个理由是许多squid功能在编译时必须被激活。假如你获取一个别人已编译的squid文件，它不包含你所需要的功能，那么你又得再编译一遍。</p><p>最后，共享库的问题可能使得在系统之间共享可执行文件困难。共享库在运行时被装载，如已知的动态链接一样。squid在编译时会侦察你系统中的C库的某些功能（例如它们是否被提供，是否能运行等）。尽管库功能不常改变，但两个不同的系统的C库之间可能有明显的区别。如果两个系统差别太大，就会对Squid造成问题。</p><p>获取squid的源代码是非常容易的。请访问squid的首页：<a
+          href="http://www.phpfans.net/www.squid-cache.org/default.htm"
+	      >http://www.squid-cache.org</a>。首页有链接指向不同的稳定版和开发版。假如你不在美国，那么请访问squid的众多镜像站点中的一个。镜像站点通常以"wwwN.CC.squid-cache.org"命名，N是数字，CC是国家的两位代码。例如，www1.au.squid-cache.org是澳大利亚的镜像站点，在主页上有链接指向不同的镜像站点。</p><p>每一个squid发布版分支（例如Squid-2.5）有它自己的HTML页面。该页面有链接指向源代码，以及与其他发布版的差别。假如你从一个发布版升级到下一个，你应该下载这些差别文件，并且打上补丁，请见3.7章节中的描述。每个版本的发布页描述新功能和重要的改进，也有链接指向已经修正的bugs。</p><p>如果web访问不可行，你能从ftp://ftp.squid-cache.org的FTP服务器获取源代码，或者使用其他FTP镜像。要获取当前版本，请访问pub/squid-2/DEVEL
+        或 pub/squid-2/STABLE
+	        目录。FTP镜像也在许多国家有，你能用同样的国家代码去猜测一些FTP镜像站点，例如ftp1.uk.squid-cache.org。</p><p>当前的Squid发布版本大约1M大小。在下载完压缩的打包文件后，你能继续第3章。 </p><br/>
+      <br/>
+      <h3 id="a3">2.3 预编译的二进制文件</h3>
+      <p>一些Unix发布版可能预包含了Squid的编译版。对Linux系统，你可以找到Squid的RPM包。通常squid
+        RPM包含在你所买的Linux光碟里。Freebsd/Netbsd/OpenBSD也在它们的ports或者packages里面包含了squid。</p><p>虽然RPM或者预编译的packages能节省你一些时间，但它们也有一些弊端。就像我提过的一样，在你开始编译squid之前，某些功能必须被激活或禁止。而你安装的预编译的包可能不包含你想要的特定功能。而且，squid的./configure脚本侦察你系统中的特定参数，这些在你系统中的参数可能与编译它的机器的参数不同。</p><p>最后，假如你想对squid打补丁，你必须等某个人编译更新的RPM或packages，或者你还得自己找源代码编译。</p><p>我强烈建议你从源代码编译squid，当然怎样选择由得你。 </p><br/>
+      <br/>
+      <h3 id="a4"> 2.4 匿名CVS</h3>
+	    <p>你能匿名访问squid的CVS文件（只读）以保持你的源代码同步更新。使用CVS的有利面是你能轻易获取当前运行版本的补丁。这样就容易发现近来改变了什么。</p><p>将这些补丁打到你所运行的版本中，有效的保持你的源代码和官方版本的同步。</p><p>CVS使用树型索引系统，树干叫做头分支。对Squid而言，这里也是所有的新改变和新功能的存放之地。头分支通常包含试验性的，也许不太稳定的代码。稳定的代码通常在其他分支上。</p><p>为了有效的使用squid的匿名CVS，你首先应知道版本和分支是怎样被标明不同的。例如，版本2.5分支被命名为SQUID_2_5。具体的发布有长的命名，例如SQUID_2_5_STABLE4。为了得到squid版本2.5.STABLE4，请使用SQUID_2_5_STABLE4标签；使用SQUID_2_5得到最近的2.5分支的代码。</p><p>为了使用squid匿名CVS服务，你首先必须设置CVSROOT环境变量：</p>
+      <pre>csh% setenv CVSROOT :pserver:anoncvs@cvs.squid-cache.org:/squid</pre>
+      <p>或者，对Bourne shell用户：</p>
+      <pre>sh$ CVSROOT=:pserver:anoncvs@cvs.squid-cache.org:/squid
+	      
+sh$ export CVSROOT</pre>
+      <p>然后你就可以登陆到服务器：</p>
+      <pre>% cvs login
+	      
+(Logging in to anoncvs@cvs.squid-cache.org)
+	      
+CVS password:</pre>
+      <p>在提示符下，敲入anoncvs作为密码。现在你可以用这个命令检查源代码树：</p>
+      <pre>% cvs checkout -r SQUID_2_5 -d squid-2.5 squid</pre>
+	    <p>-r选项指定获取修订标签。省略-r选项你将获得头分支。-d选项改变存放文件的顶级目录名。假如你省略-d选项，顶级目录名就与模块名字一样。最后的命令行参数（squid）是要检查的模块名字。</p><p>一旦你检查完squid源代码树，你能运行cvs
+        update命令去升级你的文件，和保持文件同步。其他命令包括：cvs diff, cvs log, 和 cvs
+	      annotate。</p><p>想获取更多CVS知识，请访问：http://www.cvshome.org</p><br/>
+      <br/>
+      <h3 id="a5"> 2.5 devel.squid-cache.org</h3>
+      <p>Squid的开发者维持一个独立的站点，当前运行在SourceForge，提供了试验性的squid功能。请检查它们在http://devel.squid-cache.org.在这里你能发现许多正在开发的工程，它们还未集成到squid的官方源代码里。你能通过SourceForge的匿名CVS服务来访问这些工程，或者下载与标准版本不同的差别文件。 </p><br/>
+      <br/>
+      <div class="navigation"><a href="chap01.html">&laquo; 第1章 介绍</a>&nbsp;&nbsp;<a href="chap03.html">第3章
+        编译和安装 &raquo;</a></div><div id="footer">
+                                        <div id="bottom">
+                                                <ul id="additional">
+                                                  <li id="copyright" title="Jeff Pang站点的内容和图片归Jeff Pang所有">&#169; 2005 - 2007 by Jeff Pang。 版权所有。</li>
+                                                  <li id="xhtml"><a title="Jeff Pang的站点严格基于有效的XHTML 1.0" href="http://www.phpfans.net/validator.w3.org/check@uri=referer">xhtml</a></li>
+                                                  <li id="css"><a title="Jeff Pang的站点基于有效的CSS" href="http://www.phpfans.net/jigsaw.w3.org/css-validator">css</a></li>
+                                                  <li id="goup"><a title="回到Jeff Pang的站点的顶部" href="chap02.html#top">回到顶部</a></li>
+                                                </ul>
+                                        </div>
+                                </div>
+    </div><div id="siteinfo" title="The content by Jeff Pang, the design by Sebastian Haase"><span id="info">content by Jeff Pang &middot; design by Sebastian Haase</span></div></div>
+
+  <!-- End of StatCounter Code -->
+</body>
+</html>
