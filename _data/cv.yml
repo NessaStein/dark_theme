@@ -1,24 +1,24 @@
 person:
-  name: Pavel Makhov
+  name: Nessa Stein
   profession: Software Developer
-  location: Montréal, Canada
-  citizenship: Russia
+  location: Kunming, China
+  citizenship: China
   birthday: 12.04.1990
-  email: pavel.makhov@outlook.com
-  site: http://pavelmakhov.com
-  phone:
+  email: mclyte.rabbit@gmail.com
+  site: https://nessastein.github.io
+  phone: 158-***-***-**
   github: /nessastein
   stackoverflow: /nessastein
 
 career:
- - position: Java Developer / Consultant
-   company: Savoir-Faire Linux
+ - position: Python Developer / Consultant
+   company: SWFU
    logo: sflx.png
-   location: Montreal, Canada
-   country: ca
+   location: Kunming, China
+   country: CN
    dates: 08.2016 - current
- - position: Java/Alfresco Developer
-   company: CERN
+ - position: PYTHON/Linux Developer
+   company: SWFU
    logo: cern.jpg
    location: Geneva, Switzerland
    country: ch

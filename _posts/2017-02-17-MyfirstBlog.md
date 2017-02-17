@@ -2,14 +2,14 @@
 layout: post
 title:  "My First Blog Borned"
 date:   2017-02-17 10:47:45
-comments: false
+comments: true
 description: this is a description
 tags: 
 - test
 share: true
 ---
 
-This is a test
+This is a testajslfjaslfjalfjal
 
 To use it simply grab CSS from userstyles.org, remove `@-moz-document` wrapper, paste CSS in following snippet and put it in Custom Code field in service's advanced settings:
 
