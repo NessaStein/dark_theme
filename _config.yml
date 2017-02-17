@@ -10,7 +10,6 @@ url: https://nessastein.github.io
 # For a project page here should be a project name. Otherwise (for user's/organizaion's page leave it empty)
 baseurl:
 
-safe: false
 social:
   github: nessastein
   stackoverflow: nessastein
@@ -32,7 +31,7 @@ share:
 # Google Analytics key, leave blank to ignore
 google_analytics_key: 
 # Yandex metrika (https://metrica.yandex.com/) leave blank to ignore or put true to use
-yandex_metrika: true
+yandex_metrika: 
 
 # Set this to your disqus shortname to enable comments. Note that the 'comments'
 # setting below must also be true. Individual posts can override 'comments' to
