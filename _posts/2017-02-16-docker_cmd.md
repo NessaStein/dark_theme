@@ -2,8 +2,8 @@
 layout: post
 title: "docker command tips"
 date: <2017-02-16 14:25:40>
-tags: docker
-description: docker,dockerfile
+tags: docker,dockerfile
+description: docker simple command usage
 share: 
 ---
 
