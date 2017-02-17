@@ -12,7 +12,7 @@ comments: true
 
 Here is a sample post for Jekyll-Clean-Dark theme. 
 
-* Get it from [github](https://github.com/streetturtle/jekyll-clean-dark).
+* Get it from [github](https://github.com/nessastein/jekyll-clean-dark).
 * See the [live demo](http://pavelmakhov.com/jekyll-clean-dark).
 * See it [in action on my blog](http://pavelmakhov.com).
 

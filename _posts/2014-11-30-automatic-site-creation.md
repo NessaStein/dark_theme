@@ -80,4 +80,4 @@ For the moment there is one problem with this method which I still cannot resolv
 Working project you can find on my [github].
 
 [Introducing the CSRFPolicy in Alfresco Share]: http://blogs.alfresco.com/wp/ewinlof/2013/03/11/introducing-the-new-csrf-filter-in-alfresco-share/
-[github]: https://github.com/streetturtle/Alfresco/tree/master/AutomaticSiteCreation
+[github]: https://github.com/nessastein/Alfresco/tree/master/AutomaticSiteCreation

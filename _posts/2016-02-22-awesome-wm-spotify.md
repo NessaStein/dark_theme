@@ -11,7 +11,7 @@ share: true
 
 # Control Spotify from shell
 
-First thing to do is to be able to control spotify from command line. Spotify has DBus interface and supports MPRIS2 DBus [specification](https://specifications.freedesktop.org/mpris-spec/latest/Player_Interface.html). But I've found a bash script, which wraps it in convenient functions [here](https://gist.github.com/wandernauta/6800547). Since I'd like to display current artist and song in the Awesome widget I need them to be in one line, so I've added another method to the bash script and added it in my [Github](https://gist.github.com/streetturtle/fa6258f3ff7b17747ee3):
+First thing to do is to be able to control spotify from command line. Spotify has DBus interface and supports MPRIS2 DBus [specification](https://specifications.freedesktop.org/mpris-spec/latest/Player_Interface.html). But I've found a bash script, which wraps it in convenient functions [here](https://gist.github.com/wandernauta/6800547). Since I'd like to display current artist and song in the Awesome widget I need them to be in one line, so I've added another method to the bash script and added it in my [Github](https://gist.github.com/nessastein/fa6258f3ff7b17747ee3):
 
 {% highlight bash %}
 function sp-current-oneline {
@@ -32,10 +32,10 @@ So from now you are able to control Spotify from command line! Try it:  `sp help
 
 # Widget, Awesome widget
 
-> This widget is not compatible with v4.0 of Awesome WM. For v4.0 use [this](https://github.com/streetturtle/AwesomeWM/tree/master/spotify-widget) one
+> This widget is not compatible with v4.0 of Awesome WM. For v4.0 use [this](https://github.com/nessastein/AwesomeWM/tree/master/spotify-widget) one
 {:.note}
 
-Create **spotify.lua** with following content under **/home/.config/awesome** or clone it from this [repo](https://github.com/streetturtle/AwesomeWM3/tree/master/Spotify).  
+Create **spotify.lua** with following content under **/home/.config/awesome** or clone it from this [repo](https://github.com/nessastein/AwesomeWM3/tree/master/Spotify).  
 
 {% highlight lua %}
 local wibox = require("wibox")

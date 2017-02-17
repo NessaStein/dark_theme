@@ -102,4 +102,4 @@ I think this part is quite simple and self explanatory. And since we are using n
 
 That's it! Now you can test it by restarting Awesome and hover your mouse over the widget. And just for info, I use this approach for the [email widget]({{site.url}}/2015/12/email-widget-for-awesome-wm) and for the [battery widget]({{site.url}}/battery-and-sound-volume-widged-for-awesomewm) and it works quite good so far!
 
-Please let me know in the comments below if something is unclear or seems to be wrong, I'll be happy to answer or help you :) The code could be found in [github repo](https://github.com/streetturtle/AwesomeWM/tree/master/RatesWidget).
+Please let me know in the comments below if something is unclear or seems to be wrong, I'll be happy to answer or help you :) The code could be found in [github repo](https://github.com/nessastein/AwesomeWM/tree/master/RatesWidget).

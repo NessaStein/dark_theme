@@ -82,7 +82,7 @@ It would be just a link with text, but let's add multilanguage support. Add file
 
 Put everything together in **/web-extension/site-webscripts/mycmpny/efiles/footer/footer.get.html.ftl**:
 
-<script src="https://gist.github.com/streetturtle/b8823da9a6db7443fc1e.js"></script>
+<script src="https://gist.github.com/nessastein/b8823da9a6db7443fc1e.js"></script>
 
 and style with some css in **src/main/resources/META-INF/components/footer/my-footer.css**:
 

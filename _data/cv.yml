@@ -7,8 +7,8 @@ person:
   email: pavel.makhov@outlook.com
   site: http://pavelmakhov.com
   phone:
-  github: /streetturtle
-  stackoverflow: /streetturtle
+  github: /nessastein
+  stackoverflow: /nessastein
 
 career:
  - position: Java Developer / Consultant
@@ -100,25 +100,25 @@ sideProjects:
 
   - name: Awesome WM widgets
     description: Collection of widgets for the Awesome Window Manager for Linux. Contains Battery, Volume, Spotify, Email and Rates widgets.
-    link: https://github.com/streetturtle/AwesomeWM
+    link: https://github.com/nessastein/AwesomeWM
     type: github
     langs: Lua/Python
 
   - name: AppDynamics Extensions
     description: Several extensions for AppDynamics. They were developed because out-of-the-box extensions are written in Java and it was hard to maintain and customize them.
-    link: https://github.com/streetturtle/AppDynamics-Extensions
+    link: https://github.com/nessastein/AppDynamics-Extensions
     type: github
     langs: Ruby/Bash
 
   - name: jekyll-clean-dark
     description: Theme for Jekyll - static site generator. After creating theme for my blog I shared it on github.
-    link: https://github.com/streetturtle/jekyll-clean-dark
+    link: https://github.com/nessastein/jekyll-clean-dark
     type: github
     langs: HTML/CSS/Bootstrap
 
   - name: Jekyll CV Crafter
     description: To be able to easy update/view/print my CV I created jekyll powered CV generator.
-    link: https://github.com/streetturtle/jekyll-cv-crafter
+    link: https://github.com/nessastein/jekyll-cv-crafter
     type: github
     langs: HTML/CSS/Bootstrap
 

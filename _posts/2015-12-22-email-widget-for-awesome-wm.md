@@ -14,7 +14,7 @@ and a popup message which appears when mouse hovers over an icon: ![email popup]
 
 ## Installation
 
-To install it either clone [EmailWidget](https://github.com/streetturtle/AwesomeWM/tree/master/EmailWidget) project under `~/.config/awesome/` or download a .zip archive and unzip it there.
+To install it either clone [EmailWidget](https://github.com/nessastein/AwesomeWM/tree/master/EmailWidget) project under `~/.config/awesome/` or download a .zip archive and unzip it there.
 
 After provide your credentials in python scripts so that they could connect to server and add following lines in your **rc.lua** file:
 

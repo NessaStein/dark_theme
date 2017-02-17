@@ -9,7 +9,7 @@ tags:
 - polymer
 ---
 
-> This post is a copy of the readme file of the [pdf-element](https://github.com/streetturtle/pdf-element) project 
+> This post is a copy of the readme file of the [pdf-element](https://github.com/nessastein/pdf-element) project 
 {:.note}
 
 [Polymer](https://www.polymer-project.org/1.0/) based web component which allows to view PDF files.
@@ -28,7 +28,7 @@ Features:
 # Installation
  
 {% highlight bash %}
-git clone https://github.com/streetturtle/pdf-element.git
+git clone https://github.com/nessastein/pdf-element.git
 cd ./pdf-element
 npm install
 bower install
