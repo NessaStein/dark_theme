@@ -1,19 +1,20 @@
 ---
 layout: page
-title: About
+title: 关于
 ---
 
-# About
+# 关于
 
-## ...this blog
+## ...这个博客
 
-Here I want to share some of my knowledge about Java related technolodgies, [Alfresco](http://www.alfresco.com/), databases, linux and so on.
+该博客记录了一些本人一些知识碎片，包括databases, linux ,Coding等.
 
-This blog was made on [GitHub Pages](https://pages.github.com/) using [Jekyll](http://jekyllrb.com/) with modified [jekyll clean theme](http://jekyllthemes.org/themes/jekyll-clean/) and [Disqus](https://disqus.com/) as a comments system. If you would like to use this theme for your blog please feel free to use/modify it. You can get it [here](https://github.com/nessastein/jekyll-clean-dark).
+## ...我
 
-## ...me
-
-I'm a professional software developer. I started my career as **Java Developer** at [CERN](http://home.cern/about) - the largest particle physics laboratory in the world and the birthplace of the World Wide Web :) after working there for almost 4 years I moved to Canada, Montreal where I am currently working as a **Java Consultant** at [Savoir Faire Linux](https://www.savoirfairelinux.com/en/).
-My scope of interest is Java and Java related technologies, Linux, Alfresco.
+大家好，我叫Rory，爱好开源文化，目前主要是一名**技术顾问**（打杂的）。
+擅长小中大形互联网架构设计与优化，开源云计算平台集成与应用，互联网大数据金字塔集成与应用，Linux系统开发与设计。
+平时喜欢研究代码（PHP，Python，Ruby等）。
+爱好逆向分析。
+还有其他想不起来了，给你张图自己体会：
 
 ![My helpful screenshot]({{ site.url }}/images/ava.jpg){:.center-image}
