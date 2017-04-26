@@ -1,9 +1,9 @@
 ---
 layout: page
-title: 关于
+title: About
 ---
 
-# 关于
+# About
 
 Hi Everyone, This blog is to write things about databases, linux ,Coding and so on.
 
